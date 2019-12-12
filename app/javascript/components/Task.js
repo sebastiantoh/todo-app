@@ -36,7 +36,9 @@ class Task extends React.Component {
                             />
         } else {
             title = <React.Fragment>{this.props.task.title}</React.Fragment>
-            description = <React.Fragment>{this.props.task.description}</React.Fragment>
+            description = <React.Fragment>
+                            {this.props.task.description}
+                        </React.Fragment>
         }
 
         return (

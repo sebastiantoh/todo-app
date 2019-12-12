@@ -2,7 +2,7 @@ import React from "react"
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
 
-const API_ENDPOINT = 'http://localhost:3000/api/v1/tasks';
+const API_ENDPOINT = '/api/v1/tasks';
 
 class Body extends React.Component {
     constructor(props) {
@@ -18,7 +18,7 @@ class Body extends React.Component {
         this.deleteTask = this.deleteTask.bind(this);        
     }
 
-    handleFormSubmit(title, description){
+    handleFormSubmit(title, description) {
         let body = JSON.stringify({task: {title: title, 
                                             description: description}
                                     });
@@ -26,10 +26,11 @@ class Body extends React.Component {
         fetch(API_ENDPOINT, 
             {method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: body,})
+            body: body,}
+        )
         .then((response) => {return response.json()})
         .then((task)=>{
-          this.addNewTask(task)
+            this.addNewTask(task)
         });
     }  
 
@@ -38,7 +39,7 @@ class Body extends React.Component {
         const tasks = this.state.tasks.slice();
         tasks.push(task);
         this.setState({
-          tasks: tasks
+            tasks: tasks
         });
     }
 
@@ -46,24 +47,26 @@ class Body extends React.Component {
         fetch(`${API_ENDPOINT}/${task.id}`, 
             {method: 'PUT',
             body: JSON.stringify({task: task}),
-            headers: {'Content-Type': 'application/json'}})
+            headers: {'Content-Type': 'application/json'}}
+        )
         .then((response) => { 
             this.updateTask(task)})
     }  
     
     updateTask(updatedTask){
         let newTasks = this.state.tasks
-                        .filter((task) => task.id !== updatedTask.id)
+                .filter((task) => task.id !== updatedTask.id)
         newTasks.push(updatedTask);
         this.setState({
-          tasks: newTasks
+            tasks: newTasks
         })
     }
 
     handleDelete(id){
         fetch(`${API_ENDPOINT}/${id}`,
             {method: 'DELETE', 
-            headers: {'Content-Type': 'application/json'},})
+            headers: {'Content-Type': 'application/json'},}
+        )
         .then((response) => { 
             this.deleteTask(id);
         })
@@ -106,4 +109,4 @@ class Body extends React.Component {
     }
 }
 
-export default Body
+export default Body;
