@@ -15,7 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const styles = {
     card: {
         width: 350,
-        height: 250,
+        margin: 10,
     },
     title: {
         fontWeight: 500,
