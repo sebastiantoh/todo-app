@@ -1,6 +1,9 @@
 import React from "react"
+
+
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
+
 
 const API_ENDPOINT = '/api/v1/tasks';
 
@@ -89,21 +92,14 @@ class Body extends React.Component {
         return (
             <React.Fragment>
                 <NewTask handleFormSubmit={this.handleFormSubmit}/>
-            
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Tags</th>
-                        </tr>                    
-                    </thead>
-                    <AllTasks 
-                        tasks={this.state.tasks} 
-                        handleUpdate={this.handleUpdate}
-                        handleDelete={this.handleDelete}                        
-                    />
-                </table>
+
+                
+                <AllTasks 
+                    tasks={this.state.tasks} 
+                    handleUpdate={this.handleUpdate}
+                    handleDelete={this.handleDelete}                        
+                />
+                    
             </React.Fragment>
         )
     }

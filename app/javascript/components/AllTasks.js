@@ -1,24 +1,43 @@
 import React from "react"
+import { makeStyles } from '@material-ui/core/styles';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 
 import Task from "../components/Task";
 
+const useStyles = makeStyles(theme => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: theme.palette.background.paper,
+    },
+}));
+
 const AllTasks = (props) => {
+    const classes = useStyles();
+
     let tasks = props.tasks
                     .map((task) => (
-                            <tr key={task.id}>
+                            <GridListTile key={task.id}>
                                 <Task 
                                     task={task} 
                                     handleUpdate={props.handleUpdate}
                                     handleDelete={props.handleDelete}
                                 />  
-                            </tr>                        
+                            </GridListTile>
+                                                                              
                         )
                     );
 
     return (
-        <tbody>
-            {tasks}
-        </tbody>
+        <div className={classes.root}>
+            <GridList cellHeight={300} cols={3}>
+                {tasks}
+            </GridList>
+        </div>
+        
     )
 };
 
