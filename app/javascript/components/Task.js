@@ -1,27 +1,36 @@
 import React from "react";
-
 import { withStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Chip from '@material-ui/core/Chip';
 
 
 const styles = {
     card: {
-        width: 350,
+        width: 'auto',
         margin: 10,
     },
     title: {
         fontWeight: 500,
     },
-    button: {
+    rightButtons: {
         marginLeft: 'auto',
+        paddingBottom: 0,
+    },
+    action: {
+        padding: 16,
+    },    
+    button: {
+        margin: 3,
+    },
+    tag: {
+        margin: 3,
     }
 };
 
@@ -81,8 +90,20 @@ class Task extends React.Component {
                     <Typography component="p">
                         {description}
                     </Typography>
+                </CardContent>               
+                
+                    
+                <CardActions disableSpacing className={classes.action}>
+                    {this.props.task.tag_list.map((tag, index) =>
+                        <Chip
+                            label={tag}
+                            key={index}
+                            className={classes.tag}
+                            // TODO: onDelete={data.label === 'React' ? undefined : handleDelete(data)}
+                        />
+                    )}
 
-                    <CardActions >
+                    <div className={classes.rightButtons}>
                         <Fab 
                             className={classes.button}
                             size="small" 
@@ -102,9 +123,10 @@ class Task extends React.Component {
                         >
                             <DeleteIcon />                    
                         </Fab>
-                    </CardActions>
+                    </div>
+
+                </CardActions>               
                 
-                </CardContent>
             </Card>
         )
     }

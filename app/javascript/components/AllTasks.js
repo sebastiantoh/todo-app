@@ -33,7 +33,7 @@ const AllTasks = (props) => {
 
     return (
         <div className={classes.root}>
-            <GridList cellHeight="auto" cols={3}>
+            <GridList cellHeight="auto" cols={1}>
                 {tasks}
             </GridList>
         </div>

@@ -20,7 +20,7 @@ const NewTask = (props) => {
         <form 
             className={classes.root}
             onSubmit={(event) => {props.handleFormSubmit(formFields.title.value, 
-                    formFields.description.value); 
+                    formFields.description.value, formFields.tag_list.value); 
                     event.target.reset();}
             }
         >
@@ -34,6 +34,12 @@ const NewTask = (props) => {
                 id="standard-basic" 
                 placeholder="Task Description" 
                 inputRef={input => formFields.description = input}
+            />
+
+            <TextField 
+                id="standard-basic" 
+                placeholder="Task Tags" 
+                inputRef={input => formFields.tag_list = input}
             />       
 
             <Fab size="small" color="primary" aria-label="add" type="submit">

@@ -6,17 +6,22 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Task.create(
+grocery = Task.create(
     title: "Grocery Shopping", 
-    description: "Buy 1 carton of milk and some eggs")
+    description: "Buy 1 carton of milk and some eggs",
+    tag_list: ["Personal"])
 
 Task.create(
     title: "CVWO Mid-Assignment Writeup", 
-    description: "Include: basic use cases and execution plan. By 30 Dec")
+    description: "Include: basic use cases and execution plan. By 30 Dec",
+    tag_list: ["Urgent", "School"])
+
 Task.create(
     title: "CVWO Assignment Writeup", 
-    description: "Include: accomplishments as well as a short user manual. By 25 Jan")
+    description: "Include: accomplishments as well as a short user manual. By 25 Jan",
+    tag_list: ["Urgent", "School"])
 
 Task.create(
     title: "Schedule Dentist Appointment", 
-    description: "For routine scaling and polishing")
+    description: "For routine scaling and polishing",
+    tag_list: ["Urgent", "Personal"])

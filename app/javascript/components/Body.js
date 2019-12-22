@@ -21,9 +21,10 @@ class Body extends React.Component {
         this.deleteTask = this.deleteTask.bind(this);        
     }
 
-    handleFormSubmit(title, description) {
+    handleFormSubmit(title, description, tag_list) {
         let body = JSON.stringify({task: {title: title, 
-                                            description: description}
+                                            description: description,
+                                            tag_list: tag_list,}
                                     });
 
         fetch(API_ENDPOINT, 
