@@ -22,6 +22,9 @@ class Body extends React.Component {
     }
 
     handleFormSubmit(title, description, tag_list) {
+        // Split string of tags, which are separated by commas. 
+        // model only permits tag_list to be an array
+        tag_list = tag_list.split(',').map((tag) => tag.trim());
         let body = JSON.stringify({task: {title: title, 
                                             description: description,
                                             tag_list: tag_list,}
