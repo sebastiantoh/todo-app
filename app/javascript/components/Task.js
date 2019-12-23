@@ -45,10 +45,10 @@ class Task extends React.Component {
     
     handleUpdate() {
         if (this.state.editable) {
-            let title = this.title.value;
-            let description = this.description.value;
-            let id = this.props.task.id;
-            let task = {id: id, title: title, description: description}
+            let task = {id: this.props.task.id, 
+                title: this.title.value, 
+                description: this.description.value, 
+                tag_list: this.props.task.tag_list}
             this.props.handleUpdate(task)
         }
         this.setState({
