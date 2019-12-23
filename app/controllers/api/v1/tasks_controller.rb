@@ -1,6 +1,6 @@
 class Api::V1::TasksController < ApplicationController
     def index
-        render json: Task.all
+        render json: Task.order(:created_at)
     end
 
     def create

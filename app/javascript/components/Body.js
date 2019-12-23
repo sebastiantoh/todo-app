@@ -58,11 +58,14 @@ class Body extends React.Component {
     }  
     
     updateTask(updatedTask){
-        let newTasks = this.state.tasks
-                .filter((task) => task.id !== updatedTask.id)
-        newTasks.push(updatedTask);
+        // create a copy of the tasks array
+        const tasks = this.state.tasks.slice();
+        // index of task to be updated
+        let idx = tasks.map((task) => task.id).indexOf(updatedTask.id)
+        tasks[idx] = updatedTask;
+
         this.setState({
-            tasks: newTasks
+            tasks: tasks
         })
     }
 
