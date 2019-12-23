@@ -11,6 +11,9 @@ class Api::V1::TasksController < ApplicationController
     def update
         @task = Task.find(params[:id])
         @task.update_attributes(task_params)
+        @task.tag_list = task_params[:tag_list]
+        @task.save
+        @task.reload
         render json: @task
     end
 
@@ -20,6 +23,6 @@ class Api::V1::TasksController < ApplicationController
 
     private
     def task_params
-        params.require(:task).permit(:title, :description, :tag_list)
+        params.require(:task).permit(:title, :description, :tag_list => [])
     end
 end

@@ -41,6 +41,7 @@ class Task extends React.Component {
             editable: false,
         }
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleTagDelete = this.handleTagDelete.bind(this);
     }
     
     handleUpdate() {
@@ -54,6 +55,15 @@ class Task extends React.Component {
         this.setState({
             editable: !this.state.editable,
         })
+    }
+
+    handleTagDelete(deletedTag) {
+        let updatedTagList = this.props.task.tag_list.filter((tag) => deletedTag !== tag)
+        let task = {id: this.props.task.id, 
+            title: this.props.task.title, 
+            description: this.props.task.description, 
+            tag_list: updatedTagList}
+        this.props.handleUpdate(task)
     }
 
     render() {
@@ -99,7 +109,7 @@ class Task extends React.Component {
                             label={tag}
                             key={index}
                             className={classes.tag}
-                            // TODO: onDelete={data.label === 'React' ? undefined : handleDelete(data)}
+                            onDelete={() => this.handleTagDelete(tag)}
                         />
                     )}
 

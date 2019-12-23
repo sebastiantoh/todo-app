@@ -25,3 +25,14 @@ Task.create(
     title: "Schedule Dentist Appointment", 
     description: "For routine scaling and polishing",
     tag_list: ["Urgent", "Personal"])
+
+Task.create(
+    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris maximus. ", 
+    description: "orem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mattis nulla nibh, eget varius elit porttitor sed. Ut sit amet. ",
+    tag_list: ["eaten","dangerous","log","without","lucky","experience",
+    "passage","monkey","military","rocky","torn","human",
+    "remain","flag","statement","news","attempt","bottom",
+    "means","dried","select","race","wet","rich",
+    "settlers","basic","break","hill","pitch","our",
+    "third","become","pair","pupil","manner","lips",
+    "air","rubber","shout","community","rubbed","foreign"])
