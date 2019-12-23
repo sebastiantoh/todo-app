@@ -9,6 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Chip from '@material-ui/core/Chip';
+import TextField from '@material-ui/core/TextField';
 
 
 const styles = {
@@ -71,35 +72,52 @@ class Task extends React.Component {
         let title;
         let description;
         if (this.state.editable) {
-            title = <input type='text' 
-                        ref={input => this.title = input} 
+            title = <TextField 
+                        id="outlined-full-width" 
+                        variant="outlined"
+                        fullWidth 
+                        label="Title"
+                        margin="normal"
+                        inputRef={input => this.title = input} 
                         defaultValue={this.props.task.title}
                     />
-            description = <input type='text' 
-                            ref={input => this.description = input} 
+            description = <TextField 
+                            id="outlined-full-width" 
+                            variant="outlined"
+                            fullWidth 
+                            multiline
+                            label="Description"
+                            margin="normal"
+                            inputRef={input => this.description = input} 
                             defaultValue={this.props.task.description}
                             />
         } else {
-            title = <React.Fragment>{this.props.task.title}</React.Fragment>
-            description = <React.Fragment>
-                            {this.props.task.description}
-                        </React.Fragment>
-        }
-
-        return (
-            <Card className={classes.card}>
-                <CardContent>
-                    <Typography 
+            title = <Typography 
                         className={classes.title} 
                         variant="h5" 
                         component="h2"
                     >
-                        {title}
+                        {this.props.task.title}
                     </Typography>
 
-                    <Typography component="p">
+            // to render new lines correctly
+            description = this.props.task.description.split("\n")
+                                .map((i, key) => <Typography 
+                                                        key={key}
+                                                        variant="body1"
+                                                        component="p">
+                                                    {i}
+                                                </Typography>
+                                    )
+                        
+        }
+
+        return (
+            <Card className={classes.card}>
+                <CardContent>                    
+                        {title}                 
                         {description}
-                    </Typography>
+
                 </CardContent>               
                 
                     
