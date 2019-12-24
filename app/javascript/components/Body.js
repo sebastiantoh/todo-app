@@ -5,13 +5,15 @@ import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
 
 
-const API_ENDPOINT = '/api/v1/tasks';
+const TASKS_API_ENDPOINT = '/api/v1/tasks';
+const TAGS_API_ENDPOINT = '/api/v1/tags';
 
 class Body extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             tasks: [],
+            allTags: [],
         };
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.addNewTask = this.addNewTask.bind(this);
@@ -22,15 +24,12 @@ class Body extends React.Component {
     }
 
     handleFormSubmit(title, description, tag_list) {
-        // Split string of tags, which are separated by commas. 
-        // model only permits tag_list to be an array
-        tag_list = tag_list.split(',').map((tag) => tag.trim());
         let body = JSON.stringify({task: {title: title, 
                                             description: description,
                                             tag_list: tag_list,}
                                     });
 
-        fetch(API_ENDPOINT, 
+        fetch(TASKS_API_ENDPOINT, 
             {method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: body,}
@@ -51,7 +50,7 @@ class Body extends React.Component {
     }
 
     handleUpdate(task){
-        fetch(`${API_ENDPOINT}/${task.id}`, 
+        fetch(`${TASKS_API_ENDPOINT}/${task.id}`, 
             {method: 'PUT',
             body: JSON.stringify({task: task}),
             headers: {'Content-Type': 'application/json'}}
@@ -73,7 +72,7 @@ class Body extends React.Component {
     }
 
     handleDelete(id){
-        fetch(`${API_ENDPOINT}/${id}`,
+        fetch(`${TASKS_API_ENDPOINT}/${id}`,
             {method: 'DELETE', 
             headers: {'Content-Type': 'application/json'},}
         )
@@ -90,19 +89,26 @@ class Body extends React.Component {
     }
 
     componentDidMount(){
-        fetch(API_ENDPOINT)
+        fetch(TASKS_API_ENDPOINT)
           .then((response) => {return response.json()})
           .then((data) => {this.setState({tasks: data })});
+
+        fetch(TAGS_API_ENDPOINT)
+          .then((response) => {return response.json()})
+          .then((data) => {this.setState({allTags: data })});
     }
 
     render() {
         return (
             <React.Fragment>
-                <NewTask handleFormSubmit={this.handleFormSubmit}/>
-
+                <NewTask 
+                    allTags={this.state.allTags}
+                    handleFormSubmit={this.handleFormSubmit}
+                />
                 
                 <AllTasks 
                     tasks={this.state.tasks} 
+                    allTags={this.state.allTags}
                     handleUpdate={this.handleUpdate}
                     handleDelete={this.handleDelete}                        
                 />

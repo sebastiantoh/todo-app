@@ -19,21 +19,32 @@ const NewTask = (props) => {
     return (
         <form 
             className={classes.root}
-            onSubmit={(event) => {props.handleFormSubmit(formFields.title.value, 
+            onSubmit={(event) => {
+                    event.preventDefault();
+                    props.handleFormSubmit(formFields.title.value, 
                     formFields.description.value, formFields.tag_list.value); 
-                    event.target.reset();}
+                    event.target.reset();
+                }
             }
         >
-            <TextField 
-                id="standard-basic" 
-                placeholder="Task Title" 
-                inputRef={input => formFields.title = input}
-            />
 
             <TextField 
-                id="standard-basic" 
-                placeholder="Task Description" 
-                inputRef={input => formFields.description = input}
+                id="outlined-full-width" 
+                variant="outlined"
+                fullWidth 
+                label="Title"
+                margin="normal"
+                inputRef={input => formFields.title = input} 
+            />
+            
+            <TextField 
+                id="outlined-full-width" 
+                variant="outlined"
+                fullWidth 
+                multiline
+                label="Description"
+                margin="normal"
+                inputRef={input => formFields.description = input} 
             />
 
             <TextField 

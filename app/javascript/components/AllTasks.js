@@ -23,6 +23,7 @@ const AllTasks = (props) => {
                             <GridListTile key={task.id}>
                                 <Task 
                                     task={task} 
+                                    allTags={props.allTags}
                                     handleUpdate={props.handleUpdate}
                                     handleDelete={props.handleDelete}
                                 />  
