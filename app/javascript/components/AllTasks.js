@@ -19,8 +19,8 @@ const AllTasks = (props) => {
     const classes = useStyles();
 
     let tasks = props.tasks
-                    .map((task) => (
-                            <GridListTile key={task.id}>
+                    .map((task, index) => (
+                            <GridListTile key={index}>
                                 <Task 
                                     task={task} 
                                     allTags={props.allTags}
