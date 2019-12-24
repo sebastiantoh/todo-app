@@ -20,7 +20,14 @@ class Body extends React.Component {
         this.handleUpdate = this.handleUpdate.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-        this.deleteTask = this.deleteTask.bind(this);        
+        this.deleteTask = this.deleteTask.bind(this);   
+        this.getAllTags = this.getAllTags.bind(this);
+    }
+
+    getAllTags() {
+        fetch(TAGS_API_ENDPOINT)
+          .then((response) => {return response.json()})
+          .then((data) => {this.setState({allTags: data })});
     }
 
     handleFormSubmit(title, description, tag_list) {
@@ -47,6 +54,7 @@ class Body extends React.Component {
         this.setState({
             tasks: tasks
         });
+        this.getAllTags(); 
     }
 
     handleUpdate(task){
@@ -69,6 +77,7 @@ class Body extends React.Component {
         this.setState({
             tasks: tasks
         })
+        this.getAllTags(); 
     }
 
     handleDelete(id){
@@ -86,16 +95,15 @@ class Body extends React.Component {
         this.setState({
             tasks: newTasks,
         });
+        this.getAllTags(); 
     }
 
     componentDidMount(){
         fetch(TASKS_API_ENDPOINT)
           .then((response) => {return response.json()})
           .then((data) => {this.setState({tasks: data })});
-
-        fetch(TAGS_API_ENDPOINT)
-          .then((response) => {return response.json()})
-          .then((data) => {this.setState({allTags: data })});
+        
+        this.getAllTags();        
     }
 
     render() {
