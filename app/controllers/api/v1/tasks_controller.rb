@@ -23,6 +23,10 @@ class Api::V1::TasksController < ApplicationController
 
     private
     def task_params
-        params.require(:task).permit(:title, :description, :tag_list => [])
+        params.require(:task).permit(:id, 
+                :title, 
+                :description, 
+                :completed,
+                :tag_list => [],)
     end
 end

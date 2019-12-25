@@ -24,7 +24,7 @@ Task.create(
 Task.create(
     title: "Schedule Dentist Appointment", 
     description: "For routine scaling and polishing",
-    tag_list: ["Urgent", "Personal"])
+    tag_list: ["Urgent", "Personal"]).toggle!(:completed)
 
 Task.create(
     title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris maximus. ", 

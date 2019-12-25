@@ -4,10 +4,11 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DoneIcon from '@material-ui/icons/Done';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -45,8 +46,10 @@ class Task extends React.Component {
             title: this.props.task.title,
             description: this.props.task.description,
             tag_list: this.props.task.tag_list,
+            completed: this.props.task.completed,
         }
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleTaskComplete = this.handleTaskComplete.bind(this);
         this.handleTagDelete = this.handleTagDelete.bind(this);
     }
     
@@ -62,14 +65,33 @@ class Task extends React.Component {
             editable: !this.state.editable,
         })
     }
+    
+    handleTaskComplete() {
+        let task = {id: this.props.task.id, 
+            title: this.state.title, 
+            description: this.state.description, 
+            tag_list: this.state.tag_list,
+            completed: !this.props.task.completed,
+        }
+        this.props.handleUpdate(task);
+        this.setState({
+            completed: !this.props.task.completed
+        })     
+    }
 
     handleTagDelete(deletedTag) {
         let updatedTagList = this.state.tag_list.filter((tag) => deletedTag !== tag)
         let task = {id: this.props.task.id, 
             title: this.state.title, 
             description: this.state.description, 
-            tag_list: updatedTagList}
+            tag_list: updatedTagList,
+            completed: this.props.task.completed,
+        }
         this.props.handleUpdate(task)
+        this.setState({
+            tag_list: updatedTagList,
+        })
+        
     }
 
     render() {
@@ -77,6 +99,8 @@ class Task extends React.Component {
         let title;
         let description;
         let tags;
+        let buttons;
+
         if (this.state.editable) {
             title = <TextField 
                         id="outlined-full-width" 
@@ -133,14 +157,29 @@ class Task extends React.Component {
                             />
                         )}
                     />
+
+            buttons = <Button 
+                            className={classes.button}
+                            variant="contained"
+                            size="small" 
+                            color="primary" 
+                            aria-label="edit" 
+                            onClick={() => this.handleUpdate()}
+                        >
+                            <SaveIcon />
+                        </Button>
         } else {
             title = <Typography 
                         className={classes.title} 
                         variant="h5" 
                         gutterBottom
                         component="h2"
+                        style={this.state.completed ? 
+                            {color: "#949494"} : 
+                            undefined
+                        }
                     >
-                        {this.state.title}
+                        {this.state.title}                        
                     </Typography>
 
             // to render new lines correctly
@@ -149,7 +188,12 @@ class Task extends React.Component {
                                                         key={key}
                                                         variant="body1"
                                                         gutterBottom
-                                                        component="p">
+                                                        component="p"
+                                                        style={this.state.completed ? 
+                                                            {color: "#949494"} : 
+                                                            undefined
+                                                        }
+                                                    >
                                                     {i}
                                                 </Typography>
                                     )
@@ -166,10 +210,52 @@ class Task extends React.Component {
                     )}
                 </React.Fragment>
             
+            buttons = <React.Fragment>
+                        <Button 
+                            className={classes.button}
+                            variant="contained"
+                            size="small" 
+                            color="primary" 
+                            aria-label="edit" 
+                            onClick={() => this.handleUpdate()}
+                        >
+                            <EditIcon />
+                        </Button>
+                        
+                        <Button 
+                            className={classes.button}
+                            variant="contained"
+                            size="small" 
+                            color="secondary" 
+                            aria-label="delete" 
+                            onClick={() => this.props.handleDelete(this.props.task.id)}
+                        >
+                            <DeleteIcon />                    
+                        </Button>
+
+                        <Button 
+                            className={classes.button}
+                            style={{
+                                backgroundColor: "#4caf50",
+                                color: 'white',
+                            }}
+                            variant="contained"
+                            size="small" 
+                            aria-label="complete" 
+                            onClick={() => this.handleTaskComplete()}
+                        >
+                            <DoneIcon />                    
+                        </Button>
+                    </React.Fragment>
         }
 
         return (
-            <Card className={classes.card} variant="outlined" elevation={3}>
+            <Card 
+                className={classes.card} 
+                variant="outlined" 
+                elevation={3}
+                style={this.state.completed ? {backgroundColor: "#f6f6f6"} : undefined}                
+            >
                 <CardContent>                    
                     {title}                 
                     {description}
@@ -180,25 +266,7 @@ class Task extends React.Component {
             
                 <CardActions disableSpacing>                    
                     <div className={classes.rightButtons}>
-                        <Fab 
-                            className={classes.button}
-                            size="small" 
-                            color="primary" 
-                            aria-label="edit" 
-                            onClick={() => this.handleUpdate()}
-                        >
-                            {this.state.editable ? <SaveIcon /> : <EditIcon />}
-                        </Fab>
-
-                        <Fab 
-                            className={classes.button}
-                            size="small" 
-                            color="secondary" 
-                            aria-label="delete" 
-                            onClick={() => this.props.handleDelete(this.props.task.id)}
-                        >
-                            <DeleteIcon />                    
-                        </Fab>
+                        {buttons}
                     </div>
 
                 </CardActions>               
