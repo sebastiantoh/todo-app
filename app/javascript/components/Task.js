@@ -31,6 +31,13 @@ const styles = {
     button: {
         margin: 3,
     },
+    greenButton: {
+        backgroundColor: "#4caf50",
+        color: 'white',
+        '&:hover': {
+            backgroundColor: "#388e3c",
+        },
+    },
     tag: {
         margin: 3,
     },
@@ -292,11 +299,7 @@ class Task extends React.Component {
                         </Button>
 
                         <Button 
-                            className={classes.button}
-                            style={{
-                                backgroundColor: "#4caf50",
-                                color: 'white',
-                            }}
+                            className={`${classes.button} ${classes.greenButton}`}
                             variant="contained"
                             size="small" 
                             aria-label="complete" 
@@ -344,4 +347,3 @@ class Task extends React.Component {
 }
 
 export default withStyles(styles)(Task);
-
