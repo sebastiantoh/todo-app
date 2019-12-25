@@ -156,7 +156,8 @@ class Task extends React.Component {
                         onKeyPress={event => {
                             if (event.key === 'Enter') event.preventDefault();
                         }}
-                        value={this.state.tag_list}
+                        // convert tags to lowercase, remove duplicates, and map back to array
+                        value={[...new Set(this.state.tag_list.map(tag => tag.toLowerCase()))]}
                         onChange={(event, value) => this.setState({tag_list: value})}
                         renderTags={(value, getTagProps) =>
                             value.map((tag, index) => (
