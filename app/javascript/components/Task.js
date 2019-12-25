@@ -9,6 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
+import UndoIcon from '@material-ui/icons/Undo';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -167,6 +168,7 @@ class Task extends React.Component {
                             onClick={() => this.handleUpdate()}
                         >
                             <SaveIcon />
+                            &nbsp;Save 
                         </Button>
         } else {
             title = <Typography 
@@ -205,6 +207,10 @@ class Task extends React.Component {
                                 label={tag}
                                 key={index}
                                 className={classes.tag}
+                                style={this.state.completed ? 
+                                    {color: "#949494"} : 
+                                    undefined
+                                }
                                 onDelete={() => this.handleTagDelete(tag)}
                             />
                     )}
@@ -220,6 +226,7 @@ class Task extends React.Component {
                             onClick={() => this.handleUpdate()}
                         >
                             <EditIcon />
+                            &nbsp;Edit
                         </Button>
                         
                         <Button 
@@ -230,7 +237,8 @@ class Task extends React.Component {
                             aria-label="delete" 
                             onClick={() => this.props.handleDelete(this.props.task.id)}
                         >
-                            <DeleteIcon />                    
+                            <DeleteIcon /> 
+                            &nbsp;Delete                   
                         </Button>
 
                         <Button 
@@ -244,7 +252,16 @@ class Task extends React.Component {
                             aria-label="complete" 
                             onClick={() => this.handleTaskComplete()}
                         >
-                            <DoneIcon />                    
+                            {this.state.completed
+                                ? <React.Fragment>
+                                    <UndoIcon />               
+                                        &nbsp;Mark as not Done
+                                  </React.Fragment> 
+                                : <React.Fragment>
+                                    <DoneIcon />
+                                        &nbsp;Mark as Done  
+                                  </React.Fragment>
+                            }   
                         </Button>
                     </React.Fragment>
         }
