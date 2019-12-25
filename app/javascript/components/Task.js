@@ -10,6 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import UndoIcon from '@material-ui/icons/Undo';
+import CancelIcon from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -48,12 +49,29 @@ class Task extends React.Component {
             description: this.props.task.description,
             tag_list: this.props.task.tag_list,
             completed: this.props.task.completed,
+            errors: {}
         }
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleTaskComplete = this.handleTaskComplete.bind(this);
         this.handleTagDelete = this.handleTagDelete.bind(this);
     }
     
+    validateForm(title, description) {
+        const errors = {}
+
+        if (title.length === 0) {
+            errors.title = "Title cannot be empty."
+        } else if (title.length > 50) {
+            errors.title = "Please keep your title to within 50 characters."
+        }
+
+        if (description.length === 0) {
+            errors.description = "Description cannot be empty."
+        }
+
+        return errors;
+    }
+
     handleUpdate() {
         if (this.state.editable) {
             let task = {id: this.props.task.id, 
@@ -109,12 +127,13 @@ class Task extends React.Component {
                         fullWidth 
                         label="Title"
                         margin="normal"
-                        // inputRef={input => this.title = input} 
-                        // TODO: modify this inputRef. see NewTask.js
                         value={this.state.title}
                         onChange={(event)=>{this.setState({title: event.target.value})}}
-                        // defaultValue={this.props.task.title}
+                        error={this.state.errors.title}
+                        // render error message if there is, else render empty.
+                        helperText={this.state.errors.title || ""}
                     />
+                    
             description = <TextField 
                             id="outlined-full-width" 
                             variant="outlined"
@@ -122,10 +141,11 @@ class Task extends React.Component {
                             multiline
                             label="Description"
                             margin="normal"
-                            // inputRef={input => this.description = input} 
-                            // defaultValue={this.props.task.description}
                             value={this.state.description}
                             onChange={(event)=>{this.setState({description: event.target.value})}}
+                            error={this.state.errors.description}
+                            // render error message if there is, else render empty.
+                            helperText={this.state.errors.description || ""}
                             />
 
             tags = <Autocomplete
@@ -159,17 +179,46 @@ class Task extends React.Component {
                         )}
                     />
 
-            buttons = <Button 
+            buttons = <React.Fragment>
+                        <Button 
                             className={classes.button}
                             variant="contained"
                             size="small" 
                             color="primary" 
                             aria-label="edit" 
-                            onClick={() => this.handleUpdate()}
+                            onClick={() => {
+                                const errors = this.validateForm(this.state.title, 
+                                    this.state.description);
+                                // check if there are any keys (which corresponds to errors)
+                                if (Object.keys(errors).length > 0) {
+                                    this.setState({errors: errors})
+                                    return;
+                                }
+                                this.handleUpdate()}}
                         >
                             <SaveIcon />
                             &nbsp;Save 
                         </Button>
+
+                        <Button
+                            className={classes.button}
+                            variant="contained"
+                            size="small" 
+                            color="secondary" 
+                            aria-label="cancel" 
+                            onClick={() => this.setState({
+                                editable: false,
+                                title: this.props.task.title,
+                                description: this.props.task.description,
+                                tag_list: this.props.task.tag_list,
+                                completed: this.props.task.completed,
+                                errors: {}
+                            })}
+                        >
+                            <CancelIcon />
+                            &nbsp;Cancel 
+                        </Button>
+                      </React.Fragment>
         } else {
             title = <Typography 
                         className={classes.title} 

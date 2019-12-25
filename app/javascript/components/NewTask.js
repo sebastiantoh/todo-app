@@ -24,9 +24,26 @@ class NewTask extends React.Component {
             title: '',
             description: '',
             tag_list: [],
+            errors: {},
         }
     }
 
+    validateForm(title, description) {
+        const errors = {}
+
+        if (title.length === 0) {
+            errors.title = "Title cannot be empty."
+        } else if (title.length > 50) {
+            errors.title = "Please keep your title to within 50 characters."
+        }
+
+        if (description.length === 0) {
+            errors.description = "Description cannot be empty."
+        }
+
+        return errors;
+    }
+    
     render() {
         const { classes } = this.props;
 
@@ -36,10 +53,21 @@ class NewTask extends React.Component {
                 autoComplete="off"
                 onSubmit={(event) => {
                         event.preventDefault();
-                        event.persist();
+
+                        const errors = this.validateForm(this.state.title, 
+                                this.state.description);
+                        // check if there are any keys (which corresponds to errors)
+                        if (Object.keys(errors).length > 0) {
+                            this.setState({errors: errors})
+                            return;
+                        }
+
                         this.props.handleFormSubmit(this.state.title, 
                             this.state.description, this.state.tag_list);   
-                        this.setState({title: '', description: '', tag_list: []})     
+                        this.setState({title: '', 
+                                description: '', 
+                                tag_list: [],
+                                errors: {}})
                 }}
             >
 
@@ -54,6 +82,9 @@ class NewTask extends React.Component {
                         if (event.key === 'Enter') event.preventDefault();
                     }}
                     onChange={(event)=>{this.setState({title: event.target.value})}}
+                    error={this.state.errors.title}
+                    // render error message if there is, else render empty.
+                    helperText={this.state.errors.title || ""}
                 />
                 
                 <TextField 
@@ -68,6 +99,9 @@ class NewTask extends React.Component {
                         if (event.key === 'Enter') event.preventDefault();
                     }}
                     onChange={(event)=>{this.setState({description: event.target.value})}}
+                    error={this.state.errors.description}
+                    // render error message if there is, else render empty.
+                    helperText={this.state.errors.description || ""}
                 />
 
                 <Autocomplete
