@@ -10,7 +10,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
-
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Divider from '@material-ui/core/Divider';
 
 const styles = {
     card: {
@@ -23,16 +24,17 @@ const styles = {
     rightButtons: {
         marginLeft: 'auto',
         paddingBottom: 0,
-    },
-    action: {
-        padding: 16,
-    },    
+    },   
     button: {
         margin: 3,
     },
     tag: {
         margin: 3,
-    }
+    },
+    divider: {
+        marginTop: 8,
+        marginBottom: 8,
+    },
 };
 
 class Task extends React.Component {
@@ -40,6 +42,9 @@ class Task extends React.Component {
         super(props);
         this.state = {
             editable: false,
+            title: this.props.task.title,
+            description: this.props.task.description,
+            tag_list: this.props.task.tag_list,
         }
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleTagDelete = this.handleTagDelete.bind(this);
@@ -48,9 +53,9 @@ class Task extends React.Component {
     handleUpdate() {
         if (this.state.editable) {
             let task = {id: this.props.task.id, 
-                title: this.title.value, 
-                description: this.description.value, 
-                tag_list: this.props.task.tag_list}
+                title: this.state.title, 
+                description: this.state.description, 
+                tag_list: this.state.tag_list}
             this.props.handleUpdate(task)
         }
         this.setState({
@@ -59,10 +64,10 @@ class Task extends React.Component {
     }
 
     handleTagDelete(deletedTag) {
-        let updatedTagList = this.props.task.tag_list.filter((tag) => deletedTag !== tag)
+        let updatedTagList = this.state.tag_list.filter((tag) => deletedTag !== tag)
         let task = {id: this.props.task.id, 
-            title: this.props.task.title, 
-            description: this.props.task.description, 
+            title: this.state.title, 
+            description: this.state.description, 
             tag_list: updatedTagList}
         this.props.handleUpdate(task)
     }
@@ -71,6 +76,7 @@ class Task extends React.Component {
         const { classes } = this.props;
         let title;
         let description;
+        let tags;
         if (this.state.editable) {
             title = <TextField 
                         id="outlined-full-width" 
@@ -78,8 +84,11 @@ class Task extends React.Component {
                         fullWidth 
                         label="Title"
                         margin="normal"
-                        inputRef={input => this.title = input} 
-                        defaultValue={this.props.task.title}
+                        // inputRef={input => this.title = input} 
+                        // TODO: modify this inputRef. see NewTask.js
+                        value={this.state.title}
+                        onChange={(event)=>{this.setState({title: event.target.value})}}
+                        // defaultValue={this.props.task.title}
                     />
             description = <TextField 
                             id="outlined-full-width" 
@@ -88,49 +97,88 @@ class Task extends React.Component {
                             multiline
                             label="Description"
                             margin="normal"
-                            inputRef={input => this.description = input} 
-                            defaultValue={this.props.task.description}
+                            // inputRef={input => this.description = input} 
+                            // defaultValue={this.props.task.description}
+                            value={this.state.description}
+                            onChange={(event)=>{this.setState({description: event.target.value})}}
                             />
+
+            tags = <Autocomplete
+                        multiple
+                        freeSolo
+                        id="tags-filled"
+                        options={this.props.allTags.map(tag => tag.name)}
+                        onKeyPress={event => {
+                            if (event.key === 'Enter') event.preventDefault();
+                        }}
+                        value={this.state.tag_list}
+                        onChange={(event, value) => this.setState({tag_list: value})}
+                        renderTags={(value, getTagProps) =>
+                            value.map((tag, index) => (
+                                <Chip 
+                                    label={tag}
+                                    key={index}
+                                    className={classes.tag}
+                                    {...getTagProps({index})} 
+                                />
+                            ))
+                        }
+                        renderInput={params => (
+                            <TextField
+                                {...params}
+                                variant="outlined"
+                                fullWidth
+                                label="Add tags"
+                                margin="normal"
+                            />
+                        )}
+                    />
         } else {
             title = <Typography 
                         className={classes.title} 
                         variant="h5" 
+                        gutterBottom
                         component="h2"
                     >
-                        {this.props.task.title}
+                        {this.state.title}
                     </Typography>
 
             // to render new lines correctly
-            description = this.props.task.description.split("\n")
+            description = this.state.description.split("\n")
                                 .map((i, key) => <Typography 
                                                         key={key}
                                                         variant="body1"
+                                                        gutterBottom
                                                         component="p">
                                                     {i}
                                                 </Typography>
                                     )
-                        
+            
+            tags = <React.Fragment>
+                    <Divider className={classes.divider} />
+                    {this.state.tag_list.map((tag, index) =>
+                            <Chip
+                                label={tag}
+                                key={index}
+                                className={classes.tag}
+                                onDelete={() => this.handleTagDelete(tag)}
+                            />
+                    )}
+                </React.Fragment>
+            
         }
 
         return (
-            <Card className={classes.card}>
+            <Card className={classes.card} variant="outlined" elevation={3}>
                 <CardContent>                    
-                        {title}                 
-                        {description}
-
-                </CardContent>               
-                
+                    {title}                 
+                    {description}
                     
-                <CardActions disableSpacing className={classes.action}>
-                    {this.props.task.tag_list.map((tag, index) =>
-                        <Chip
-                            label={tag}
-                            key={index}
-                            className={classes.tag}
-                            onDelete={() => this.handleTagDelete(tag)}
-                        />
-                    )}
-
+                    {tags}                    
+                </CardContent>
+                            
+            
+                <CardActions disableSpacing>                    
                     <div className={classes.rightButtons}>
                         <Fab 
                             className={classes.button}
