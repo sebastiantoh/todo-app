@@ -7,7 +7,7 @@ import Body from "../components/Body";
 const Main = (props) => {
     return (
         <Container fixed>
-            <Typography variant="h3" component="h1">
+            <Typography variant="h3" component="h1" gutterBottom>
                 To-Do List
             </Typography>
 
