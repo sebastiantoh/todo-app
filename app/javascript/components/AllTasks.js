@@ -9,6 +9,7 @@ const useStyles = makeStyles(theme => ({
     root: {
       display: 'flex',
       flexWrap: 'wrap',
+      flexGrow: 1,
       justifyContent: 'space-around',
       overflow: 'hidden',
       backgroundColor: theme.palette.background.paper,
@@ -33,12 +34,9 @@ const AllTasks = (props) => {
                     );
 
     return (
-        <div className={classes.root}>
-            <GridList cellHeight="auto" cols={1}>
-                {tasks}
-            </GridList>
-        </div>
-        
+        <GridList cellHeight="auto" cols={1} className={classes.root}>
+            {tasks}
+        </GridList>        
     )
 };
 
