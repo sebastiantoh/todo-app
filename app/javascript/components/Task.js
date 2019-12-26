@@ -12,9 +12,9 @@ import DoneIcon from '@material-ui/icons/Done';
 import UndoIcon from '@material-ui/icons/Undo';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import Divider from '@material-ui/core/Divider';
+
+import {validateForm, TaskForm} from "../components/TaskForm";
 
 const styles = {
     card: {
@@ -62,22 +62,9 @@ class Task extends React.Component {
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleComplete = this.handleComplete.bind(this);
         this.handleTagDelete = this.handleTagDelete.bind(this);
-    }
-    
-    validateForm(title, description) {
-        const errors = {}
-
-        if (title.length === 0) {
-            errors.title = "Title cannot be empty."
-        } else if (title.length > 50) {
-            errors.title = "Please keep your title to within 50 characters."
-        }
-
-        if (description.length === 0) {
-            errors.description = "Description cannot be empty."
-        }
-
-        return errors;
+        this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
+        this.handleDescriptionUpdate = this.handleDescriptionUpdate.bind(this);
+        this.handleTagUpdate = this.handleTagUpdate.bind(this);
     }
 
     handleUpdate() {
@@ -119,74 +106,39 @@ class Task extends React.Component {
             tag_list: updatedTagList,
         })   
     }
+
+    handleTitleUpdate(event) {
+        this.setState({title: event.target.value});
+    }
+
+    handleDescriptionUpdate(event) {
+        this.setState({description: event.target.value});
+    }
+    
+    handleTagUpdate(event, value) {
+        this.setState({tag_list: value});
+    }
     
     render() {
         const { classes } = this.props;
+        let taskContent;
         let title;
         let description;
         let tags;
         let buttons;
 
         if (this.state.editable) {
-            title = <TextField 
-                        id="outlined-full-width" 
-                        variant="outlined"
-                        fullWidth 
-                        label="Title"
-                        margin="normal"
-                        value={this.state.title}
-                        onChange={(event)=>{this.setState({title: event.target.value})}}
-                        error={this.state.errors.title}
-                        // render error message if there is, else render empty.
-                        helperText={this.state.errors.title || ""}
-                    />
-                    
-            description = <TextField 
-                            id="outlined-full-width" 
-                            variant="outlined"
-                            fullWidth 
-                            multiline
-                            label="Description"
-                            margin="normal"
-                            value={this.state.description}
-                            onChange={(event)=>{this.setState({description: event.target.value})}}
-                            error={this.state.errors.description}
-                            // render error message if there is, else render empty.
-                            helperText={this.state.errors.description || ""}
-                            />
-
-            tags = <Autocomplete
-                        multiple
-                        freeSolo
-                        id="tags-filled"
-                        options={this.props.allTags.map(tag => tag.name)}
-                        onKeyPress={event => {
-                            if (event.key === 'Enter') event.preventDefault();
-                        }}
-                        // convert tags to lowercase, remove duplicates, and map back to array
-                        value={[...new Set(this.state.tag_list.map(tag => tag.toLowerCase()))]}
-                        onChange={(event, value) => this.setState({tag_list: value})}
-                        renderTags={(value, getTagProps) =>
-                            value.map((tag, index) => (
-                                <Chip 
-                                    label={tag}
-                                    key={index}
-                                    className={classes.tag}
-                                    {...getTagProps({index})} 
-                                />
-                            ))
-                        }
-                        renderInput={params => (
-                            <TextField
-                                {...params}
-                                variant="outlined"
-                                fullWidth
-                                label="Add tags"
-                                margin="normal"
-                            />
-                        )}
-                    />
-
+            taskContent = <TaskForm 
+                                title={this.state.title}
+                                description={this.state.description}
+                                tag_list={this.state.tag_list}
+                                allTags={this.props.allTags}
+                                errors={this.state.errors}
+                                handleTitleUpdate={this.handleTitleUpdate}
+                                handleDescriptionUpdate={this.handleDescriptionUpdate}
+                                handleTagUpdate={this.handleTagUpdate}
+                            />                            
+            
             buttons = <React.Fragment>
                         <Button 
                             className={classes.button}
@@ -195,7 +147,7 @@ class Task extends React.Component {
                             color="primary" 
                             aria-label="edit" 
                             onClick={() => {
-                                const errors = this.validateForm(this.state.title, 
+                                const errors = validateForm(this.state.title, 
                                     this.state.description);
                                 // check if there are any keys (which corresponds to errors)
                                 if (Object.keys(errors).length > 0) {
@@ -273,6 +225,12 @@ class Task extends React.Component {
                             />
                     )}
                 </React.Fragment>
+
+            taskContent = <React.Fragment>
+                            {title}
+                            {description}
+                            {tags}
+                        </React.Fragment>
             
             buttons = <React.Fragment>
                         <Button 
@@ -331,12 +289,8 @@ class Task extends React.Component {
                 style={this.state.completed ? {backgroundColor: "#f6f6f6"} : undefined}                
             >
                 <CardContent>                    
-                    {title}                 
-                    {description}
-                    
-                    {tags}                    
+                    {taskContent}                
                 </CardContent>
-                            
             
                 <CardActions disableSpacing>                    
                     <div className={classes.rightButtons}>

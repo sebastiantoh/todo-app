@@ -140,7 +140,6 @@ class Body extends React.Component {
                     this.processNotificationQueue();
                 }  
         })
-        console.log(this.state.notificationQueue)
     }
 
     handleNotificationClose(event, reason) {
