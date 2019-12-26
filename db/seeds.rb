@@ -27,7 +27,7 @@ Task.create(
     tag_list: ["Urgent", "Personal"]).toggle!(:completed)
 
 Task.create(
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris maximus. ", 
+    title: "Mauris maximus.", 
     description: "orem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mattis nulla nibh, eget varius elit porttitor sed. Ut sit amet. ",
     tag_list: ["eaten","dangerous","log","without","lucky","experience",
     "passage","monkey","military","rocky","torn","human",
@@ -36,3 +36,50 @@ Task.create(
     "settlers","basic","break","hill","pitch","our",
     "third","become","pair","pupil","manner","lips",
     "air","rubber","shout","community","rubbed","foreign"])
+
+Task.create(
+    title: "SHOULD NOT APPEAR! Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. ", 
+    description: "orem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mattis nulla nibh, eget varius elit porttitor sed. Ut sit amet. ",
+    tag_list: ["eaten","dangerous","log","without","lucky","experience",
+    "passage","monkey","military","rocky","torn","human",
+    "remain","flag","statement","news","attempt","bottom",
+    "means","dried","select","race","wet","rich",
+    "settlers","basic","break","hill","pitch","our",
+    "third","become","pair","pupil","manner","lips",
+    "air","rubber","shout","community","rubbed","foreign"])
+
+Task.create(
+    title: "", 
+    description: "",
+    tag_list: [])
+
+Task.create(
+    title: "SHOULD NOT APPEAR! Non-empty title, with empty description and tags", 
+    description: "",
+    tag_list: [])
+
+Task.create(
+    title: "", 
+    description: "SHOULD NOT APPEAR! Non-empty description, with empty title and tags",
+    tag_list: [])
+
+Task.create(
+    title: "", 
+    description: "",
+    tag_list: ["SHOULD NOT APPEAR!", "non-empty tag"])
+
+Task.create(
+    title: "testing empty tags", 
+    description: "testing empty tags",
+    tag_list: [])
+
+Task.create(
+    title: "SHOULD NOT APPEAR! testing empty description", 
+    description: "",
+    tag_list: ["non-empty tag"])
+
+
+Task.create(
+    title: "", 
+    description: "SHOULD NOT APPEAR! testing empty title",
+    tag_list: ["non-empty tag"])
