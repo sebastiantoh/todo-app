@@ -56,10 +56,11 @@ class Task extends React.Component {
             description: this.props.task.description,
             tag_list: this.props.task.tag_list,
             completed: this.props.task.completed,
-            errors: {}
+            errors: {},
         }
+        
         this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleTaskComplete = this.handleTaskComplete.bind(this);
+        this.handleComplete = this.handleComplete.bind(this);
         this.handleTagDelete = this.handleTagDelete.bind(this);
     }
     
@@ -92,7 +93,7 @@ class Task extends React.Component {
         })
     }
     
-    handleTaskComplete() {
+    handleComplete() {
         let task = {id: this.props.task.id, 
             title: this.state.title, 
             description: this.state.description, 
@@ -116,10 +117,9 @@ class Task extends React.Component {
         this.props.handleUpdate(task)
         this.setState({
             tag_list: updatedTagList,
-        })
-        
+        })   
     }
-
+    
     render() {
         const { classes } = this.props;
         let title;
@@ -202,6 +202,7 @@ class Task extends React.Component {
                                     this.setState({errors: errors})
                                     return;
                                 }
+                                this.props.handleNewNotification("Task updated");
                                 this.handleUpdate()}}
                         >
                             <SaveIcon />
@@ -292,7 +293,10 @@ class Task extends React.Component {
                             size="small" 
                             color="secondary" 
                             aria-label="delete" 
-                            onClick={() => this.props.handleDelete(this.props.task.id)}
+                            onClick={() => {
+                                this.props.handleNewNotification("Task deleted");
+                                this.props.handleDelete(this.props.task.id)
+                            }}
                         >
                             <DeleteIcon /> 
                             &nbsp;Delete                   
@@ -303,7 +307,7 @@ class Task extends React.Component {
                             variant="contained"
                             size="small" 
                             aria-label="complete" 
-                            onClick={() => this.handleTaskComplete()}
+                            onClick={() => this.handleComplete()}
                         >
                             {this.state.completed
                                 ? <React.Fragment>
@@ -336,10 +340,10 @@ class Task extends React.Component {
             
                 <CardActions disableSpacing>                    
                     <div className={classes.rightButtons}>
-                        {buttons}
+                        {buttons}                    
                     </div>
 
-                </CardActions>               
+                </CardActions>          
                 
             </Card>
         )

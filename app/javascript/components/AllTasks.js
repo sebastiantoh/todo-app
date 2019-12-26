@@ -27,6 +27,7 @@ const AllTasks = (props) => {
                                     allTags={props.allTags}
                                     handleUpdate={props.handleUpdate}
                                     handleDelete={props.handleDelete}
+                                    handleNewNotification={props.handleNewNotification}
                                 />  
                             </GridListTile>
                                                                               

@@ -63,7 +63,8 @@ class NewTask extends React.Component {
                         }
 
                         this.props.handleFormSubmit(this.state.title, 
-                            this.state.description, this.state.tag_list);   
+                            this.state.description, this.state.tag_list); 
+                            this.props.handleNewNotification("Task created");
                         this.setState({title: '', 
                                 description: '', 
                                 tag_list: [],

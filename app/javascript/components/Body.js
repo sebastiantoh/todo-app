@@ -1,8 +1,8 @@
 import React from "react"
 
-
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
+import Notification from "../components/Notification";
 
 
 const TASKS_API_ENDPOINT = '/api/v1/tasks';
@@ -14,14 +14,26 @@ class Body extends React.Component {
         this.state = {
             tasks: [],
             allTags: [],
+            notificationActive: false,
+            currNotification: "",
+            notificationQueue: [],
         };
+
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.addNewTask = this.addNewTask.bind(this);
+
         this.handleUpdate = this.handleUpdate.bind(this);
         this.updateTask = this.updateTask.bind(this);
+
         this.handleDelete = this.handleDelete.bind(this);
         this.deleteTask = this.deleteTask.bind(this);   
+
         this.getAllTags = this.getAllTags.bind(this);
+
+        this.processNotificationQueue = this.processNotificationQueue.bind(this);
+        this.handleNewNotification = this.handleNewNotification.bind(this);
+        this.handleNotificationClose = this.handleNotificationClose.bind(this);
+        this.handleNotificationExited = this.handleNotificationExited.bind(this);
     }
 
     getAllTags() {
@@ -98,6 +110,51 @@ class Body extends React.Component {
         this.getAllTags(); 
     }
 
+    processNotificationQueue() {
+        if (this.state.notificationQueue.length > 0) {
+            // create a copy, omitting the first element
+            let notificationQueue = this.state.notificationQueue.slice(1);
+            let currNotification = this.state.notificationQueue[0];
+            this.setState({notificationActive: true,
+                    currNotification: currNotification,
+                    notificationQueue: notificationQueue,
+            })
+        }
+    }
+    
+    handleNewNotification(message) {
+        // create a copy
+        let notificationQueue = this.state.notificationQueue.slice();
+        notificationQueue.push({
+                message: message, 
+                key: new Date().getTime()
+        });
+
+        // callback function executed only after state is updated
+        this.setState({notificationQueue: notificationQueue}, () => {
+                if (this.state.notificationActive) {
+                    // immediately begin dismissing current message to start
+                    // showing new one, which will call handleNotificationExited
+                    this.setState({notificationActive: false})
+                } else {
+                    this.processNotificationQueue();
+                }  
+        })
+        console.log(this.state.notificationQueue)
+    }
+
+    handleNotificationClose(event, reason) {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        this.setState({notificationActive: false})
+    };
+
+    handleNotificationExited() {
+        this.processNotificationQueue();
+    }
+
     componentDidMount(){
         fetch(TASKS_API_ENDPOINT)
           .then((response) => {return response.json()})
@@ -112,14 +169,23 @@ class Body extends React.Component {
                 <NewTask 
                     allTags={this.state.allTags}
                     handleFormSubmit={this.handleFormSubmit}
+                    handleNewNotification={this.handleNewNotification}
                 />
                 
                 <AllTasks 
                     tasks={this.state.tasks} 
                     allTags={this.state.allTags}
                     handleUpdate={this.handleUpdate}
-                    handleDelete={this.handleDelete}                        
+                    handleDelete={this.handleDelete}  
+                    handleNewNotification={this.handleNewNotification}                      
                 />
+
+                <Notification 
+                    notificationActive={this.state.notificationActive}
+                    currNotification={this.state.currNotification}
+                    handleNotificationClose={this.handleNotificationClose}
+                    handleNotificationExited={this.handleNotificationExited}
+                />     
                     
             </React.Fragment>
         )
