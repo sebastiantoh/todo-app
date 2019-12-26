@@ -65,6 +65,7 @@ const TaskForm = (props) => {
                     allTags={props.allTags}
                     tag_list={props.tag_list}
                     handleTagUpdate={props.handleTagUpdate}
+                    label="Add tags"
             />
     
     return (

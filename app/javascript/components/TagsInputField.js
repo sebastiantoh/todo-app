@@ -41,7 +41,7 @@ const TagsInputField = (props) => {
                     {...params}
                     variant="outlined"
                     fullWidth
-                    label="Add tags"
+                    label={props.label}
                     margin="normal"
                 />
             )}

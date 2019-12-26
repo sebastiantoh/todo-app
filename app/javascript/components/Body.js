@@ -6,14 +6,15 @@ import Divider from '@material-ui/core/Divider';
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
 import Notification from "../components/Notification";
+import TaskFilterForm from "../components/TaskFilterForm";
 
 const TASKS_API_ENDPOINT = '/api/v1/tasks';
 const TAGS_API_ENDPOINT = '/api/v1/tags';
 
 const styles = {
     divider: {
-        marginTop: 32,
-        marginBottom: 32,
+        marginTop: 24,
+        marginBottom: 24,
         height: 5,
     },
 };
@@ -23,6 +24,7 @@ class Body extends React.Component {
         super(props);
         this.state = {
             tasks: [],
+            filteredTasks: [],
             allTags: [],
             notificationActive: false,
             currNotification: "",
@@ -36,7 +38,9 @@ class Body extends React.Component {
         this.updateTask = this.updateTask.bind(this);
 
         this.handleDelete = this.handleDelete.bind(this);
-        this.deleteTask = this.deleteTask.bind(this);   
+        this.deleteTask = this.deleteTask.bind(this);
+
+        this.handleFilteredTasks = this.handleFilteredTasks.bind(this);
 
         this.getAllTags = this.getAllTags.bind(this);
 
@@ -120,6 +124,37 @@ class Body extends React.Component {
         this.getAllTags(); 
     }
 
+    // filterQuery: string, filterTags: array of string
+    handleFilteredTasks(filterQuery, filterTags) {
+        filterQuery = filterQuery.toLowerCase()
+        filterTags = filterTags.map(tag => tag.toLowerCase())
+
+        // lambda to filter based on query: checks title and description
+        const queryFilter = (tasks) => tasks.filter(task => 
+                task.title.toLowerCase().includes(filterQuery) 
+                || task.description.toLowerCase().includes(filterQuery));
+        
+        // lambda to filter based on tags. Task must contain EVERY tag in filterTags
+        const tagsFilter = (tasks) => tasks.filter(task =>
+                filterTags.every(tag => task.tag_list.includes(tag)))
+
+        let filteredTasks;
+
+        // if filterQuery and filterTag is non-empty, filter based on both fields
+        if (filterQuery && filterTags.length != 0) {        
+            filteredTasks = tagsFilter(queryFilter(this.state.tasks));
+        // if filterQuery is nonempty, filterTags is empty
+        } else if (filterQuery && filterTags.length == 0) {
+            filteredTasks = queryFilter(this.state.tasks)
+        // if filterQuery is empty, filterTags is nonempty
+        } else if (!filterQuery && filterTags.length != 0) {
+            filteredTasks = tagsFilter(this.state.tasks)
+        } else {
+            filteredTasks = this.state.tasks;
+        }
+        this.setState({filteredTasks: filteredTasks})
+    }
+
     processNotificationQueue() {
         if (this.state.notificationQueue.length > 0) {
             // create a copy, omitting the first element
@@ -167,7 +202,7 @@ class Body extends React.Component {
     componentDidMount(){
         fetch(TASKS_API_ENDPOINT)
           .then((response) => {return response.json()})
-          .then((data) => {this.setState({tasks: data })});
+          .then((data) => {this.setState({tasks: data, filteredTasks: data})});
         
         this.getAllTags();        
     }
@@ -177,7 +212,7 @@ class Body extends React.Component {
 
         return (
             <React.Fragment>
-                <Box>
+                <Box mb={2}>
                     <NewTask 
                         allTags={this.state.allTags}
                         handleFormSubmit={this.handleFormSubmit}
@@ -186,9 +221,16 @@ class Body extends React.Component {
                 </Box>
                 <Divider className={classes.divider}/>
 
-                <Box>
+                <Box mb={2}> 
+                    <TaskFilterForm 
+                        allTags={this.state.allTags}
+                        handleFilteredTasks={this.handleFilteredTasks}
+                    />
+                </Box>
+
+                <Box mb={2}>
                     <AllTasks 
-                        tasks={this.state.tasks} 
+                        tasks={this.state.filteredTasks} 
                         allTags={this.state.allTags}
                         handleUpdate={this.handleUpdate}
                         handleDelete={this.handleDelete}  
@@ -196,14 +238,12 @@ class Body extends React.Component {
                     />
                 </Box>
 
-                <Box>
-                    <Notification 
-                        notificationActive={this.state.notificationActive}
-                        currNotification={this.state.currNotification}
-                        handleNotificationClose={this.handleNotificationClose}
-                        handleNotificationExited={this.handleNotificationExited}
-                    />   
-                </Box>  
+                <Notification 
+                    notificationActive={this.state.notificationActive}
+                    currNotification={this.state.currNotification}
+                    handleNotificationClose={this.handleNotificationClose}
+                    handleNotificationExited={this.handleNotificationExited}
+                />   
                     
             </React.Fragment>
         )
