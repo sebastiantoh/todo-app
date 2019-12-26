@@ -2,6 +2,7 @@ import React from "react";
 import { withStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider'; 
+import Typography from '@material-ui/core/Typography';
 
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
@@ -25,6 +26,8 @@ class Body extends React.Component {
         this.state = {
             tasks: [],
             filteredTasks: [],
+            filterQuery: "",
+            filterTags: [],
             allTags: [],
             notificationActive: false,
             currNotification: "",
@@ -40,7 +43,8 @@ class Body extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
 
-        this.handleFilteredTasks = this.handleFilteredTasks.bind(this);
+        this.handleFilterForm = this.handleFilterForm.bind(this);
+        this.filterTasks = this.filterTasks.bind(this)
 
         this.getAllTags = this.getAllTags.bind(this);
 
@@ -77,9 +81,9 @@ class Body extends React.Component {
         // create a copy of the tasks array
         const tasks = this.state.tasks.slice();
         tasks.push(task);
-        this.setState({
-            tasks: tasks
-        });
+        this.setState({tasks: tasks}, 
+                () => () => this.filterTasks()
+        );
         this.getAllTags(); 
     }
 
@@ -100,9 +104,9 @@ class Body extends React.Component {
         let idx = tasks.map((task) => task.id).indexOf(updatedTask.id)
         tasks[idx] = updatedTask;
 
-        this.setState({
-            tasks: tasks
-        })
+        this.setState({tasks: tasks}, 
+                () => this.filterTasks()
+        )
         this.getAllTags(); 
     }
 
@@ -118,17 +122,26 @@ class Body extends React.Component {
 
     deleteTask(id) {
         let newTasks = this.state.tasks.filter((task => task.id != id))
-        this.setState({
-            tasks: newTasks,
-        });
+        this.setState({tasks: newTasks}, 
+                () => this.filterTasks()
+        );
         this.getAllTags(); 
     }
 
-    // filterQuery: string, filterTags: array of string
-    handleFilteredTasks(filterQuery, filterTags) {
-        filterQuery = filterQuery.toLowerCase()
-        filterTags = filterTags.map(tag => tag.toLowerCase())
+    handleFilterForm(filterQuery, filterTags) {
+        this.setState({filterQuery: filterQuery, 
+                filterTags: filterTags}, 
+            () => this.filterTasks()
+        );
+    }
 
+    // filterQuery: string, filterTags: array of string
+    filterTasks() {
+        let filterQuery = this.state.filterQuery.toLowerCase()
+        let filterTags = this.state.filterTags.map(tag => tag.toLowerCase())
+
+        console.log(filterQuery, filterTags)
+        
         // lambda to filter based on query: checks title and description
         const queryFilter = (tasks) => tasks.filter(task => 
                 task.title.toLowerCase().includes(filterQuery) 
@@ -224,18 +237,27 @@ class Body extends React.Component {
                 <Box mb={2}> 
                     <TaskFilterForm 
                         allTags={this.state.allTags}
-                        handleFilteredTasks={this.handleFilteredTasks}
+                        filterQuery={this.state.filterQuery}
+                        filterTags={this.state.filterTags}
+                        handleFilterForm={this.handleFilterForm}
                     />
                 </Box>
 
                 <Box mb={2}>
-                    <AllTasks 
+                    {/* check if there's any tasks created */}
+                    {this.state.tasks.length == 0 
+                    ? <Typography variant="body1" component="p" gutterBottom>
+                            No tasks created yet.
+                        </Typography>
+                    : <AllTasks 
                         tasks={this.state.filteredTasks} 
                         allTags={this.state.allTags}
                         handleUpdate={this.handleUpdate}
                         handleDelete={this.handleDelete}  
                         handleNewNotification={this.handleNewNotification}                      
-                    />
+                        />
+                    }
+                    
                 </Box>
 
                 <Notification 

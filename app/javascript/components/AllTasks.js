@@ -2,6 +2,7 @@ import React from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import Typography from '@material-ui/core/Typography';
 
 import Task from "../components/Task";
 
@@ -18,8 +19,11 @@ const useStyles = makeStyles(theme => ({
 
 const AllTasks = (props) => {
     const classes = useStyles();
+    
+    let tasks;
 
-    let tasks = props.tasks
+    if (props.tasks.length != 0) {
+        tasks = props.tasks
                     .map((task) => (
                             <GridListTile key={task.id}>
                                 <Task 
@@ -33,7 +37,12 @@ const AllTasks = (props) => {
                                                                               
                         )
                     );
-
+    } else {
+        tasks = <Typography variant="body1" component="p" gutterBottom>
+                    No matching results.
+                </Typography>
+    }
+ 
     return (
         <GridList cellHeight="auto" cols={1} className={classes.root}>
             {tasks}

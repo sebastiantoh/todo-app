@@ -5,62 +5,43 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import TagsInputField from "../components/TagsInputField";
 
-class TaskFilterForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filterQuery: "",
-            filterTags: []
-        }
-        this.handleFilterQueryUpdate = this.handleFilterQueryUpdate.bind(this);
-        this.handleTagUpdate = this.handleTagUpdate.bind(this);
-    }
-    
-    handleFilterQueryUpdate(event) {
-        this.setState({filterQuery: event.target.value}, () =>
-                this.props.handleFilteredTasks(this.state.filterQuery, this.state.filterTags)
-        );
-    }
+const TaskFilterForm = (props) => {
+    let searchField = <TextField
+                            variant="outlined"
+                            fullWidth 
+                            margin="normal"
+                            value={props.filterQuery} // to update body: pass in these as props
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') event.preventDefault();
+                            }}
+                            onChange={(event) => {
+                                props.handleFilterForm(event.target.value, props.filterTags)
+                            }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
 
-    handleTagUpdate(event, value) {
-        this.setState({filterTags: value}, () => 
-                this.props.handleFilteredTasks(this.state.filterQuery, this.state.filterTags)
-        );
-    }
+    let tagsField = <TagsInputField
+                        allTags={props.allTags} 
+                        tag_list={props.filterTags}
+                        handleTagUpdate={(event, value) => {
+                            props.handleFilterForm(props.filterQuery, value)
+                        }}
+                        label="Filter based on tags"
+                    />   
 
-    render() {
-        let searchField = <TextField
-                                variant="outlined"
-                                fullWidth 
-                                margin="normal"
-                                value={this.state.filterQuery}
-                                onKeyPress={event => {
-                                    if (event.key === 'Enter') event.preventDefault();
-                                }}
-                                onChange={this.handleFilterQueryUpdate}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <SearchIcon />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-
-        let tagsField = <TagsInputField
-                            allTags={this.props.allTags} 
-                            tag_list={this.state.filterTags}
-                            handleTagUpdate={this.handleTagUpdate}
-                            label="Filter based on tags"
-                        />   
-
-        return (
-            <React.Fragment>
-                {searchField}
-                {tagsField}
-            </React.Fragment>
-        )
-    }
+    return (
+        <React.Fragment>
+            {searchField}
+            {tagsField}
+        </React.Fragment>
+    )    
 }
+
 
 export default TaskFilterForm;
