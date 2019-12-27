@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
 import Notification from "../components/Notification";
-import TaskFilterForm from "../components/TaskFilterForm";
+import {TaskFilterSortForm, taskSortKey} from "../components/TaskFilterSortForm";
 
 const TASKS_API_ENDPOINT = '/api/v1/tasks';
 const TAGS_API_ENDPOINT = '/api/v1/tags';
@@ -25,9 +25,11 @@ class Body extends React.Component {
         super(props);
         this.state = {
             tasks: [],
-            filteredTasks: [],
+            filteredAndSortedTasks: [],
             filterQuery: "",
             filterTags: [],
+            // sort by date created (ascending), as default option
+            sortQuery: "dateCreatedAsc",
             hideCompletedTasks: false,
             allTags: [],
             notificationActive: false,
@@ -44,8 +46,8 @@ class Body extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
 
-        this.handleFilterForm = this.handleFilterForm.bind(this);
-        this.filterTasks = this.filterTasks.bind(this)
+        this.handleFilterSortForm = this.handleFilterSortForm.bind(this);
+        this.filterAndSortTasks = this.filterAndSortTasks.bind(this)
 
         this.getAllTags = this.getAllTags.bind(this);
 
@@ -83,7 +85,7 @@ class Body extends React.Component {
         const tasks = this.state.tasks.slice();
         tasks.push(task);
         this.setState({tasks: tasks}, 
-                () => this.filterTasks()
+                () => this.filterAndSortTasks()
         );
         this.getAllTags(); 
     }
@@ -106,7 +108,7 @@ class Body extends React.Component {
         tasks[idx] = updatedTask;
 
         this.setState({tasks: tasks}, 
-                () => this.filterTasks()
+                () => this.filterAndSortTasks()
         )
         this.getAllTags(); 
     }
@@ -124,21 +126,22 @@ class Body extends React.Component {
     deleteTask(id) {
         let newTasks = this.state.tasks.filter((task => task.id != id))
         this.setState({tasks: newTasks}, 
-                () => this.filterTasks()
+                () => this.filterAndSortTasks()
         );
         this.getAllTags(); 
     }
 
-    handleFilterForm(filterQuery, filterTags, hideCompletedTasks) {
+    handleFilterSortForm(filterQuery, filterTags, hideCompletedTasks, sortQuery) {
         this.setState({filterQuery: filterQuery, 
                 filterTags: filterTags,
-                hideCompletedTasks: hideCompletedTasks}, 
-            () => this.filterTasks()
+                hideCompletedTasks: hideCompletedTasks,
+                sortQuery: sortQuery}, 
+            () => this.filterAndSortTasks()
         );
     }
 
     // filterQuery: string, filterTags: array of string
-    filterTasks() {
+    filterAndSortTasks() {
         let filterQuery = this.state.filterQuery.toLowerCase()
         let filterTags = this.state.filterTags.map(tag => tag.toLowerCase())
         
@@ -172,8 +175,12 @@ class Body extends React.Component {
         if (filterTags.length != 0) {
             filteredTasks = tagsFilter(filteredTasks);
         }
+        
+        // taskSortKey is an object with different sort lambdas based on sortQuery
+        // each lambda takes in an array of tasks
+        let filteredAndSortedTasks = taskSortKey[this.state.sortQuery](filteredTasks)
 
-        this.setState({filteredTasks: filteredTasks})
+        this.setState({filteredAndSortedTasks: filteredAndSortedTasks})
     }
 
     processNotificationQueue() {
@@ -223,9 +230,9 @@ class Body extends React.Component {
     componentDidMount(){
         fetch(TASKS_API_ENDPOINT)
           .then((response) => {return response.json()})
-          .then((data) => {this.setState({tasks: data, filteredTasks: data})});
+          .then((data) => {this.setState({tasks: data, filteredAndSortedTasks: data})});
         
-        this.getAllTags();        
+        this.getAllTags();
     }
 
     render() {
@@ -243,11 +250,12 @@ class Body extends React.Component {
                 <Divider className={classes.divider}/>
 
                 <Box mb={2}> 
-                    <TaskFilterForm 
+                    <TaskFilterSortForm 
                         allTags={this.state.allTags}
                         filterQuery={this.state.filterQuery}
                         filterTags={this.state.filterTags}
-                        handleFilterForm={this.handleFilterForm}
+                        sortQuery={this.state.sortQuery}
+                        handleFilterSortForm={this.handleFilterSortForm}
                         hideCompletedTasks={this.state.hideCompletedTasks}
                     />
                 </Box>
@@ -259,7 +267,7 @@ class Body extends React.Component {
                             No tasks created yet.
                         </Typography>
                     : <AllTasks 
-                        tasks={this.state.filteredTasks} 
+                        tasks={this.state.filteredAndSortedTasks} 
                         allTags={this.state.allTags}
                         handleUpdate={this.handleUpdate}
                         handleDelete={this.handleDelete}  
