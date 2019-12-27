@@ -1,24 +1,12 @@
-# README
+# To-Do List
+A simple To-Do List app written in Rails and React as submission for CVWO AY19/20 Assignment.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**Name:** Sebastian Toh Shi Jian  
+**Matriculation Number:** A0196545R
 
-Things you may want to cover:
+## Mid-Assignment Submission
 
-* Ruby version
+Successful Installation of Rails:
+![rails successful installation](cvwo-submissions/installation.png)
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[Mid-Assignment Write-Up](cvwo-submissions/mid-assignment-Sebastian_Toh-A0196545R.pdf)
