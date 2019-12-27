@@ -1,12 +1,22 @@
-import React from "react"
+import React from "react";
+import { withStyles } from '@material-ui/styles';
+import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider'; 
 
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
 import Notification from "../components/Notification";
 
-
 const TASKS_API_ENDPOINT = '/api/v1/tasks';
 const TAGS_API_ENDPOINT = '/api/v1/tags';
+
+const styles = {
+    divider: {
+        marginTop: 32,
+        marginBottom: 32,
+        height: 5,
+    },
+};
 
 class Body extends React.Component {
     constructor(props) {
@@ -163,32 +173,41 @@ class Body extends React.Component {
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
             <React.Fragment>
-                <NewTask 
-                    allTags={this.state.allTags}
-                    handleFormSubmit={this.handleFormSubmit}
-                    handleNewNotification={this.handleNewNotification}
-                />
-                
-                <AllTasks 
-                    tasks={this.state.tasks} 
-                    allTags={this.state.allTags}
-                    handleUpdate={this.handleUpdate}
-                    handleDelete={this.handleDelete}  
-                    handleNewNotification={this.handleNewNotification}                      
-                />
+                <Box>
+                    <NewTask 
+                        allTags={this.state.allTags}
+                        handleFormSubmit={this.handleFormSubmit}
+                        handleNewNotification={this.handleNewNotification}
+                    />
+                </Box>
+                <Divider className={classes.divider}/>
 
-                <Notification 
-                    notificationActive={this.state.notificationActive}
-                    currNotification={this.state.currNotification}
-                    handleNotificationClose={this.handleNotificationClose}
-                    handleNotificationExited={this.handleNotificationExited}
-                />     
+                <Box>
+                    <AllTasks 
+                        tasks={this.state.tasks} 
+                        allTags={this.state.allTags}
+                        handleUpdate={this.handleUpdate}
+                        handleDelete={this.handleDelete}  
+                        handleNewNotification={this.handleNewNotification}                      
+                    />
+                </Box>
+
+                <Box>
+                    <Notification 
+                        notificationActive={this.state.notificationActive}
+                        currNotification={this.state.currNotification}
+                        handleNotificationClose={this.handleNotificationClose}
+                        handleNotificationExited={this.handleNotificationExited}
+                    />   
+                </Box>  
                     
             </React.Fragment>
         )
     }
 }
 
-export default Body;
+export default withStyles(styles)(Body);
