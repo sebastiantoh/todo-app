@@ -10,9 +10,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
 const TagsInputField = (props) => {
     const classes = useStyles();
+
+    const taggingCount = (inputTag) => 
+            props.allTags.filter(tag => tag.name == inputTag)[0].taggings_count;
 
     return (
         <Autocomplete
@@ -26,6 +28,7 @@ const TagsInputField = (props) => {
             // convert tags to lowercase, remove duplicates, and map back to array
             value={[...new Set(props.tag_list.map(tag => tag.toLowerCase()))]}
             onChange={props.handleTagUpdate}
+            renderOption={(tag) => `${tag} [${taggingCount(tag)}]`}
             renderTags={(value, getTagProps) =>
                 value.map((tag, index) => (
                     <Chip 

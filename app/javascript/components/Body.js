@@ -82,7 +82,7 @@ class Body extends React.Component {
         const tasks = this.state.tasks.slice();
         tasks.push(task);
         this.setState({tasks: tasks}, 
-                () => () => this.filterTasks()
+                () => this.filterTasks()
         );
         this.getAllTags(); 
     }
