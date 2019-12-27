@@ -26,10 +26,10 @@ const styles = {
     },
     rightButtons: {
         marginLeft: 'auto',
-        paddingBottom: 0,
+        paddingBottom: 3,
     },   
     button: {
-        margin: 3,
+        margin: 4,
     },
     greenButton: {
         backgroundColor: "#4caf50",

@@ -1,6 +1,6 @@
 import React from "react";
 import { withStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
 import {validateForm, TaskForm} from "../components/TaskForm";
@@ -8,10 +8,12 @@ import {validateForm, TaskForm} from "../components/TaskForm";
 const styles = {
     root: {
         '& > *': {
-          marginTop: 8,
           marginBottom: 8,
         },
     },
+    button: {
+        marginLeft: 'auto',
+    },  
 };
 
 class NewTask extends React.Component {
@@ -80,9 +82,22 @@ class NewTask extends React.Component {
                     handleTagUpdate={this.handleTagUpdate}
                 />
 
-                <Fab size="small" color="primary" aria-label="add" type="submit">
-                    <AddIcon />            
-                </Fab>
+                <div style={{display: "flex",
+                            paddingBottom: 3,
+                            }}
+                >
+                    <Button 
+                        className={classes.button}
+                        variant="contained"
+                        size="small" 
+                        color="primary" 
+                        aria-label="add" 
+                        type="submit"
+                    >
+                        <AddIcon />
+                        &nbsp;Add New Task 
+                    </Button>
+                </div>
 
             </form>
         )
