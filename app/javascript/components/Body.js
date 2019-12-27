@@ -28,6 +28,7 @@ class Body extends React.Component {
             filteredTasks: [],
             filterQuery: "",
             filterTags: [],
+            hideCompletedTasks: false,
             allTags: [],
             notificationActive: false,
             currNotification: "",
@@ -128,9 +129,10 @@ class Body extends React.Component {
         this.getAllTags(); 
     }
 
-    handleFilterForm(filterQuery, filterTags) {
+    handleFilterForm(filterQuery, filterTags, hideCompletedTasks) {
         this.setState({filterQuery: filterQuery, 
-                filterTags: filterTags}, 
+                filterTags: filterTags,
+                hideCompletedTasks: hideCompletedTasks}, 
             () => this.filterTasks()
         );
     }
@@ -139,32 +141,38 @@ class Body extends React.Component {
     filterTasks() {
         let filterQuery = this.state.filterQuery.toLowerCase()
         let filterTags = this.state.filterTags.map(tag => tag.toLowerCase())
-
-        console.log(filterQuery, filterTags)
         
         // lambda to filter based on query: checks title and description
-        const queryFilter = (tasks) => tasks.filter(task => 
-                task.title.toLowerCase().includes(filterQuery) 
-                || task.description.toLowerCase().includes(filterQuery));
+        const queryFilter = (tasks) => 
+                tasks.filter(task => 
+                        task.title.toLowerCase().includes(filterQuery) 
+                        || task.description.toLowerCase().includes(filterQuery));
         
         // lambda to filter based on tags. Task must contain EVERY tag in filterTags
-        const tagsFilter = (tasks) => tasks.filter(task =>
-                filterTags.every(tag => task.tag_list.includes(tag)))
+        const tagsFilter = (tasks) => 
+                tasks.filter(task =>
+                        filterTags.every(tag => task.tag_list.includes(tag)))
 
-        let filteredTasks;
+        // lambda to filter based on tasks which are not completed
+        const hideCompletedTaskFilter = (tasks) => 
+                tasks.filter(task => !task.completed)
 
-        // if filterQuery and filterTag is non-empty, filter based on both fields
-        if (filterQuery && filterTags.length != 0) {        
-            filteredTasks = tagsFilter(queryFilter(this.state.tasks));
-        // if filterQuery is nonempty, filterTags is empty
-        } else if (filterQuery && filterTags.length == 0) {
-            filteredTasks = queryFilter(this.state.tasks)
-        // if filterQuery is empty, filterTags is nonempty
-        } else if (!filterQuery && filterTags.length != 0) {
-            filteredTasks = tagsFilter(this.state.tasks)
-        } else {
-            filteredTasks = this.state.tasks;
+        let filteredTasks = this.state.tasks;
+
+        if (this.state.hideCompletedTasks) {
+            filteredTasks = hideCompletedTaskFilter(filteredTasks);
         }
+
+        // if filterQuery is non-empty, filter based on filter query
+        if (filterQuery) {
+            filteredTasks = queryFilter(filteredTasks);
+        }
+
+        // if filterTags is non-empty, filter based on filter tags
+        if (filterTags.length != 0) {
+            filteredTasks = tagsFilter(filteredTasks);
+        }
+
         this.setState({filteredTasks: filteredTasks})
     }
 
@@ -240,6 +248,7 @@ class Body extends React.Component {
                         filterQuery={this.state.filterQuery}
                         filterTags={this.state.filterTags}
                         handleFilterForm={this.handleFilterForm}
+                        hideCompletedTasks={this.state.hideCompletedTasks}
                     />
                 </Box>
 
