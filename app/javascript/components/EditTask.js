@@ -48,7 +48,7 @@ class EditTask extends React.Component {
     saved
     */
     handleDueDateUpdate(date) {
-        this.setState({due_date:date})
+        this.setState({due_date: date})
     }
     
     render() {
@@ -102,6 +102,7 @@ class EditTask extends React.Component {
                             title={this.state.title}
                             description={this.state.description}
                             tag_list={this.state.tag_list}
+                            due_date={this.state.due_date}
                             allTags={this.props.allTags}
                             errors={this.state.errors}
                             handleTitleUpdate={this.handleTitleUpdate}

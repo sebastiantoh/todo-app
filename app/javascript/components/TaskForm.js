@@ -68,8 +68,6 @@ const TaskForm = (props) => {
                     label="Add tags"
             />
     
-    let dueDateAndButtons;
-
     return (
         <React.Fragment>
         <Grid container justify="space-between" alignItems="flex-end">
