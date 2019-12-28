@@ -69,22 +69,6 @@ const TaskForm = (props) => {
             />
     
     let dueDateAndButtons;
-    if (props.isNewTaskForm) {
-        dueDateAndButtons = <React.Fragment>
-                                <Grid item xs={4}>
-                                        <DueDate 
-                                            handleDueDateUpdate={props.handleDueDateUpdate}
-                                            due_date={props.due_date}
-                                        />
-                                    </Grid>
-
-                                    <Grid item>
-                                        {props.buttons}
-                                    </Grid>
-                            </React.Fragment>
-    } else {
-        dueDateAndButtons = null;
-    }
 
     return (
         <React.Fragment>
@@ -101,7 +85,17 @@ const TaskForm = (props) => {
                 {tags}
             </Grid>
 
-            {dueDateAndButtons}
+            <Grid item xs={4}>
+                <DueDate 
+                    handleDueDateUpdate={props.handleDueDateUpdate}
+                    due_date={props.due_date}
+                />
+            </Grid>
+
+            <Grid item>
+                {props.buttons}
+            </Grid>
+            
              
         </Grid>
         </React.Fragment>

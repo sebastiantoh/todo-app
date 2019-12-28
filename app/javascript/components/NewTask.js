@@ -81,11 +81,13 @@ class NewTask extends React.Component {
                         this.props.handleFormSubmit(this.state.title, 
                             this.state.description, this.state.tag_list, this.state.due_date); 
                         this.props.handleNewNotification("Task created");
-                        this.setState({title: '', 
+                        this.setState({
+                                title: '', 
                                 description: '', 
                                 tag_list: [],
                                 due_date: null,
-                                errors: {}})
+                                errors: {}
+                        })
                 }}
             >
                 <TaskForm 
@@ -93,17 +95,14 @@ class NewTask extends React.Component {
                     description={this.state.description}
                     tag_list={this.state.tag_list}
                     due_date={this.state.due_date}
-                    allTags={this.props.allTags}
                     errors={this.state.errors}
+                    allTags={this.props.allTags}
                     handleTitleUpdate={this.handleTitleUpdate}
                     handleDescriptionUpdate={this.handleDescriptionUpdate}
                     handleTagUpdate={this.handleTagUpdate}
                     handleDueDateUpdate={this.handleDueDateUpdate}
                     buttons={buttons}
-                    isNewTaskForm={true}
-                />
-
-                
+                />                
             </form>
         )
     }

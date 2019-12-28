@@ -6,17 +6,15 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import UndoIcon from '@material-ui/icons/Undo';
-import CancelIcon from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
-import {validateForm, TaskForm} from "../components/TaskForm";
 import DueDate from "../components/DueDate";
+import EditTask from "../components/EditTask";
 
 const styles = {
     card: {
@@ -26,10 +24,6 @@ const styles = {
     title: {
         fontWeight: 500,
     },
-    rightButtons: {
-        marginLeft: 'auto',
-        paddingBottom: 3,
-    },   
     button: {
         margin: 4,
     },
@@ -54,181 +48,102 @@ class Task extends React.Component {
         super(props);
         this.state = {
             editable: false,
-            // TODO: refactor below, may not be necessary to store in state.
-            title: this.props.task.title,
-            description: this.props.task.description,
-            tag_list: this.props.task.tag_list,
-            completed: this.props.task.completed,
-            due_date: this.props.task.due_date,
-            errors: {},
         }
         
-        this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleComplete = this.handleComplete.bind(this);
+        this.handleTaskCompletionStatusUpdate = this.handleTaskCompletionStatusUpdate.bind(this);
         this.handleTagDelete = this.handleTagDelete.bind(this);
-        this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
-        this.handleDescriptionUpdate = this.handleDescriptionUpdate.bind(this);
-        this.handleTagUpdate = this.handleTagUpdate.bind(this);
         this.handleDueDateUpdate = this.handleDueDateUpdate.bind(this);
+        this.toggleTaskEditability = this.toggleTaskEditability.bind(this);
+        this.handleSaveTaskUpdate = this.handleSaveTaskUpdate.bind(this);
+    }
+    
+    handleTaskCompletionStatusUpdate() {
+        let task = {...this.props.task, 
+            completed: !this.props.task.completed
+        }
+        // updates new task completion status to backend
+        this.props.handleUpdate(task);   
     }
 
-    handleUpdate() {
-        if (this.state.editable) {
-            let task = {
-                id: this.props.task.id, 
-                title: this.state.title, 
-                description: this.state.description, 
-                tag_list: this.state.tag_list,
-                completed: this.state.completed,
-                due_date: this.state.due_date
-            }
-            this.props.handleUpdate(task)
+    handleTagDelete(deletedTag) {
+        let updatedTagList = this.props.task.tag_list.filter((tag) => deletedTag !== tag)
+        let task = {...this.props.task, 
+            tag_list: updatedTagList,
         }
+        // updates new tag list to backend
+        this.props.handleUpdate(task)
+    }
+
+    handleDueDateUpdate(date) {
+        let task = {...this.props.task,
+            due_date: date,
+        }
+        // updates new due dateto backend
+        this.props.handleUpdate(task);
+    }
+    
+    // called when user clicks "Save" or "Cancel"
+    toggleTaskEditability() {
         this.setState({
             editable: !this.state.editable,
         })
     }
     
-    handleComplete() {
+    handleSaveTaskUpdate(title, description, tag_list, completed, due_date) {
         let task = {
             id: this.props.task.id, 
-            title: this.state.title, 
-            description: this.state.description, 
-            tag_list: this.state.tag_list,
-            completed: !this.props.task.completed,
-            due_date: this.state.due_date,
+            title: title, 
+            description: description, 
+            tag_list: tag_list,
+            completed: completed,
+            due_date: due_date,
         }
+        // updates new task details to backend
         this.props.handleUpdate(task);
-        this.setState({
-            completed: !this.props.task.completed
-        })     
+        this.toggleTaskEditability();
     }
 
-    handleTagDelete(deletedTag) {
-        let updatedTagList = this.state.tag_list.filter((tag) => deletedTag !== tag)
-        let task = {
-            id: this.props.task.id, 
-            title: this.state.title, 
-            description: this.state.description, 
-            tag_list: updatedTagList,
-            completed: this.props.task.completed,
-            due_date: this.state.due_date,
-        }
-        this.props.handleUpdate(task)
-        this.setState({
-            tag_list: updatedTagList,
-        })   
-    }
-
-    handleTitleUpdate(event) {
-        this.setState({title: event.target.value});
-    }
-
-    handleDescriptionUpdate(event) {
-        this.setState({description: event.target.value});
-    }
-    
-    handleTagUpdate(event, value) {
-        this.setState({tag_list: value});
-    }
-
-    handleDueDateUpdate(date) {
-        let task = {
-            id: this.props.task.id, 
-            title: this.state.title, 
-            description: this.state.description, 
-            tag_list: this.state.tag_list,
-            completed: this.state.completed,
-            due_date: date,
-        }
-        this.props.handleUpdate(task);
-        this.setState({due_date: date});
-    }
-    
     render() {
         const { classes } = this.props;
-        let taskContent;
-        let title;
-        let description;
-        let tags;
-        let buttons;
+        let cardContent;
+        let cardActions;
 
         if (this.state.editable) {
-            taskContent = <TaskForm 
-                                title={this.state.title}
-                                description={this.state.description}
-                                tag_list={this.state.tag_list}
+            cardContent = <React.Fragment>                                 
+                            <EditTask 
+                                task={this.props.task}
                                 allTags={this.props.allTags}
-                                errors={this.state.errors}
-                                handleTitleUpdate={this.handleTitleUpdate}
-                                handleDescriptionUpdate={this.handleDescriptionUpdate}
-                                handleTagUpdate={this.handleTagUpdate}
-                                isNewTaskForm={false}
-                            />                            
-            
-            buttons = <React.Fragment>
-                        <Button 
-                            className={classes.button}
-                            variant="contained"
-                            size="medium" 
-                            color="primary" 
-                            aria-label="edit" 
-                            onClick={() => {
-                                const errors = validateForm(this.state.title, 
-                                    this.state.description);
-                                // check if there are any keys (which corresponds to errors)
-                                if (Object.keys(errors).length > 0) {
-                                    this.setState({errors: errors})
-                                    return;
-                                }
-                                this.props.handleNewNotification("Task updated");
-                                this.handleUpdate()}}
-                        >
-                            <SaveIcon />
-                            &nbsp;Save 
-                        </Button>
-
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            size="medium" 
-                            color="secondary" 
-                            aria-label="cancel" 
-                            onClick={() => this.setState({
-                                editable: false,
-                                title: this.props.task.title,
-                                description: this.props.task.description,
-                                tag_list: this.props.task.tag_list,
-                                completed: this.props.task.completed,
-                                errors: {}
-                            })}
-                        >
-                            <CancelIcon />
-                            &nbsp;Cancel 
-                        </Button>
-                      </React.Fragment>
+                                toggleTaskEditability={this.toggleTaskEditability}
+                                handleSaveTaskUpdate={this.handleSaveTaskUpdate}
+                                handleNewNotification={this.props.handleNewNotification}
+                            />
+                        </React.Fragment>
         } else {
+            let title;
+            let description;
+            let tags;
+
             title = <Typography 
                         className={classes.title} 
                         variant="h5" 
                         gutterBottom
                         component="h2"
-                        style={this.state.completed ? 
+                        style={this.props.task.completed ? 
                             {color: "#949494"} : 
                             undefined
                         }
                     >
-                        {this.state.title}                        
+                        {this.props.task.title}                        
                     </Typography>
 
             // to render new lines correctly
-            description = this.state.description.split("\n")
+            description = this.props.task.description.split("\n")
                                 .map((i, key) => <Typography 
                                                         key={key}
                                                         variant="body1"
                                                         gutterBottom
                                                         component="p"
-                                                        style={this.state.completed ? 
+                                                        style={this.props.task.completed ? 
                                                             {color: "#949494"} : 
                                                             undefined
                                                         }
@@ -239,12 +154,12 @@ class Task extends React.Component {
             
             tags = <React.Fragment>
                     <Divider className={classes.divider} />
-                    {this.state.tag_list.map((tag, index) =>
+                    {this.props.task.tag_list.map((tag, index) =>
                             <Chip
                                 label={tag}
                                 key={index}
                                 className={classes.tag}
-                                style={this.state.completed ? 
+                                style={this.props.task.completed ? 
                                     {color: "#949494"} : 
                                     undefined
                                 }
@@ -253,59 +168,73 @@ class Task extends React.Component {
                     )}
                 </React.Fragment>
 
-            taskContent = <React.Fragment>
+            cardContent = <React.Fragment>
                             {title}
                             {description}
                             {tags}
                         </React.Fragment>
             
-            buttons = <React.Fragment>
-                        <Button 
-                            className={classes.button}
-                            variant="contained"
-                            size="medium" 
-                            color="primary" 
-                            aria-label="edit" 
-                            onClick={() => this.handleUpdate()}
-                        >
-                            <EditIcon />
-                            &nbsp;Edit
-                        </Button>
-                        
-                        <Button 
-                            className={classes.button}
-                            variant="contained"
-                            size="medium" 
-                            color="secondary" 
-                            aria-label="delete" 
-                            onClick={() => {
-                                this.props.handleNewNotification("Task deleted");
-                                this.props.handleDelete(this.props.task.id)
-                            }}
-                        >
-                            <DeleteIcon /> 
-                            &nbsp;Delete                   
-                        </Button>
+            let buttons = <React.Fragment>
+                                <Button 
+                                    className={classes.button}
+                                    variant="contained"
+                                    size="medium" 
+                                    color="primary" 
+                                    aria-label="edit" 
+                                    onClick={() => this.toggleTaskEditability()}
+                                >
+                                    <EditIcon />
+                                    &nbsp;Edit
+                                </Button>
+                            
+                                <Button 
+                                    className={classes.button}
+                                    variant="contained"
+                                    size="medium" 
+                                    color="secondary" 
+                                    aria-label="delete" 
+                                    onClick={() => {
+                                        this.props.handleNewNotification("Task deleted");
+                                        this.props.handleDelete(this.props.task.id)
+                                    }}
+                                >
+                                    <DeleteIcon /> 
+                                    &nbsp;Delete                   
+                                </Button>
 
-                        <Button 
-                            className={`${classes.button} ${classes.greenButton}`}
-                            variant="contained"
-                            size="medium" 
-                            aria-label="complete" 
-                            onClick={() => this.handleComplete()}
-                        >
-                            {this.state.completed
-                                ? <React.Fragment>
-                                    <UndoIcon />               
-                                        &nbsp;Mark as not Done
-                                  </React.Fragment> 
-                                : <React.Fragment>
-                                    <DoneIcon />
-                                        &nbsp;Mark as Done  
-                                  </React.Fragment>
-                            }   
-                        </Button>
-                    </React.Fragment>
+                                <Button 
+                                    className={`${classes.button} ${classes.greenButton}`}
+                                    variant="contained"
+                                    size="medium" 
+                                    aria-label="complete" 
+                                    onClick={() => this.handleTaskCompletionStatusUpdate()}
+                                >
+                                    {this.props.task.completed
+                                        ? <React.Fragment>
+                                            <UndoIcon />               
+                                                &nbsp;Mark as not Done
+                                        </React.Fragment> 
+                                        : <React.Fragment>
+                                            <DoneIcon />
+                                                &nbsp;Mark as Done  
+                                        </React.Fragment>
+                                    }   
+                                </Button>
+                            </React.Fragment>
+
+            cardActions = <CardActions style={{padding: "16px"}}>     
+                                <Grid container justify="space-between" alignItems="flex-end">
+                                    <Grid item>
+                                        <DueDate 
+                                            handleDueDateUpdate={this.handleDueDateUpdate}
+                                            due_date={this.props.task.due_date}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        {buttons}
+                                    </Grid>
+                                </Grid>               
+                            </CardActions> 
         }
 
         return (
@@ -313,27 +242,13 @@ class Task extends React.Component {
                 className={classes.card} 
                 variant="outlined" 
                 elevation={3}
-                style={this.state.completed ? {backgroundColor: "#f6f6f6"} : undefined}                
-            >
-                <CardContent>                    
-                    {taskContent}                
+                style={this.props.task.completed ? {backgroundColor: "#f6f6f6"} : undefined}                
+            >   
+                <CardContent>
+                    {cardContent}
                 </CardContent>
-            
-                <CardActions style={{padding: "16px"}}>     
-                    <Grid container justify="space-between" alignItems="flex-end">
-                        <Grid item>
-                            <DueDate 
-                                handleDueDateUpdate={this.handleDueDateUpdate}
-                                due_date={this.state.due_date}
-                            />
-                        </Grid>
-                        <Grid item>
-                            {buttons}
-                        </Grid>
-                    </Grid>               
-                   
-                </CardActions>          
                 
+                {cardActions}              
             </Card>
         )
     }
