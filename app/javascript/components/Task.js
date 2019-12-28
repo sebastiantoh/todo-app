@@ -13,8 +13,10 @@ import UndoIcon from '@material-ui/icons/Undo';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 
 import {validateForm, TaskForm} from "../components/TaskForm";
+import DueDate from "../components/DueDate";
 
 const styles = {
     card: {
@@ -52,10 +54,12 @@ class Task extends React.Component {
         super(props);
         this.state = {
             editable: false,
+            // TODO: refactor below, may not be necessary to store in state.
             title: this.props.task.title,
             description: this.props.task.description,
             tag_list: this.props.task.tag_list,
             completed: this.props.task.completed,
+            due_date: this.props.task.due_date,
             errors: {},
         }
         
@@ -65,14 +69,19 @@ class Task extends React.Component {
         this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
         this.handleDescriptionUpdate = this.handleDescriptionUpdate.bind(this);
         this.handleTagUpdate = this.handleTagUpdate.bind(this);
+        this.handleDueDateUpdate = this.handleDueDateUpdate.bind(this);
     }
 
     handleUpdate() {
         if (this.state.editable) {
-            let task = {id: this.props.task.id, 
+            let task = {
+                id: this.props.task.id, 
                 title: this.state.title, 
                 description: this.state.description, 
-                tag_list: this.state.tag_list}
+                tag_list: this.state.tag_list,
+                completed: this.state.completed,
+                due_date: this.state.due_date
+            }
             this.props.handleUpdate(task)
         }
         this.setState({
@@ -81,11 +90,13 @@ class Task extends React.Component {
     }
     
     handleComplete() {
-        let task = {id: this.props.task.id, 
+        let task = {
+            id: this.props.task.id, 
             title: this.state.title, 
             description: this.state.description, 
             tag_list: this.state.tag_list,
             completed: !this.props.task.completed,
+            due_date: this.state.due_date,
         }
         this.props.handleUpdate(task);
         this.setState({
@@ -95,11 +106,13 @@ class Task extends React.Component {
 
     handleTagDelete(deletedTag) {
         let updatedTagList = this.state.tag_list.filter((tag) => deletedTag !== tag)
-        let task = {id: this.props.task.id, 
+        let task = {
+            id: this.props.task.id, 
             title: this.state.title, 
             description: this.state.description, 
             tag_list: updatedTagList,
             completed: this.props.task.completed,
+            due_date: this.state.due_date,
         }
         this.props.handleUpdate(task)
         this.setState({
@@ -117,6 +130,19 @@ class Task extends React.Component {
     
     handleTagUpdate(event, value) {
         this.setState({tag_list: value});
+    }
+
+    handleDueDateUpdate(date) {
+        let task = {
+            id: this.props.task.id, 
+            title: this.state.title, 
+            description: this.state.description, 
+            tag_list: this.state.tag_list,
+            completed: this.state.completed,
+            due_date: date,
+        }
+        this.props.handleUpdate(task);
+        this.setState({due_date: date});
     }
     
     render() {
@@ -292,11 +318,19 @@ class Task extends React.Component {
                     {taskContent}                
                 </CardContent>
             
-                <CardActions disableSpacing>                    
-                    <div className={classes.rightButtons}>
-                        {buttons}                    
-                    </div>
-
+                <CardActions style={{padding: "16px"}}>     
+                    <Grid container justify="space-between" alignItems="center">
+                        <Grid item>
+                            <DueDate 
+                                handleDueDateUpdate={this.handleDueDateUpdate}
+                                due_date={this.state.due_date}
+                            />
+                        </Grid>
+                        <Grid item>
+                            {buttons}
+                        </Grid>
+                    </Grid>               
+                   
                 </CardActions>          
                 
             </Card>

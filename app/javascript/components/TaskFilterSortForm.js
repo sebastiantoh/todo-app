@@ -7,7 +7,6 @@ import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 
 import TagsInputField from "../components/TagsInputField";
 
@@ -73,8 +72,6 @@ const TaskFilterSortForm = (props) => {
                                     label="Sort by:&nbsp;&nbsp;"
                                     labelPlacement="start"
                                     control={
-                                
-                                
                                         <Select
                                             value={props.sortQuery}
                                             onChange={(event) => {
@@ -103,7 +100,7 @@ const TaskFilterSortForm = (props) => {
             {searchField}
             {tagsField}
             <Grid container justify="space-between" alignitems="flex-end">
-            {hideCompletedTaskSwitch}
+                {hideCompletedTaskSwitch}
                 {customSortingField}
             </Grid>
             <div style={{display: "flex",

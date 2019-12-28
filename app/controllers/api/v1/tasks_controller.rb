@@ -10,7 +10,9 @@ class Api::V1::TasksController < ApplicationController
 
     def update
         @task = Task.find(params[:id])
-        @task.update_attributes(task_params)
+        # convert string representation of date in DateTime object
+        task_params[:due_date] = DateTime.parse(task_params[:due_date]);
+        @task.update(task_params)
         @task.tag_list = task_params[:tag_list]
         @task.save
         @task.reload
@@ -27,6 +29,8 @@ class Api::V1::TasksController < ApplicationController
                 :title, 
                 :description, 
                 :completed,
-                :tag_list => [],)
+                :due_date,
+                :tag_list => [],
+                )
     end
 end

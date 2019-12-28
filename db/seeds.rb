@@ -14,12 +14,14 @@ grocery = Task.create(
 Task.create(
     title: "CVWO Mid-Assignment Writeup", 
     description: "Include: basic use cases and execution plan. By 30 Dec",
-    tag_list: ["Urgent", "School"])
+    tag_list: ["Urgent", "School"],
+    due_date: "2019-12-30T23:59:59+08:00")
 
 Task.create(
     title: "CVWO Assignment Writeup", 
     description: "Include: accomplishments as well as a short user manual. By 25 Jan",
-    tag_list: ["Urgent", "School"])
+    tag_list: ["Urgent", "School"],
+    due_date: "2020-01-25T23:59:59+08:00")
 
 Task.create(
     title: "Schedule Dentist Appointment", 
