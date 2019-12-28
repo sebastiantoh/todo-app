@@ -228,6 +228,7 @@ class Task extends React.Component {
                                         <DueDate 
                                             handleDueDateUpdate={this.handleDueDateUpdate}
                                             due_date={this.props.task.due_date}
+                                            completed={this.props.task.completed}
                                         />
                                     </Grid>
                                     <Grid item>

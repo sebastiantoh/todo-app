@@ -87,6 +87,8 @@ const TaskForm = (props) => {
                 <DueDate 
                     handleDueDateUpdate={props.handleDueDateUpdate}
                     due_date={props.due_date}
+                    // false is so that warning for overdue tasks will not be rendered
+                    completed={false}
                 />
             </Grid>
 
