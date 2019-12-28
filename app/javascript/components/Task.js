@@ -163,13 +163,14 @@ class Task extends React.Component {
                                 handleTitleUpdate={this.handleTitleUpdate}
                                 handleDescriptionUpdate={this.handleDescriptionUpdate}
                                 handleTagUpdate={this.handleTagUpdate}
+                                isNewTaskForm={false}
                             />                            
             
             buttons = <React.Fragment>
                         <Button 
                             className={classes.button}
                             variant="contained"
-                            size="small" 
+                            size="medium" 
                             color="primary" 
                             aria-label="edit" 
                             onClick={() => {
@@ -190,7 +191,7 @@ class Task extends React.Component {
                         <Button
                             className={classes.button}
                             variant="contained"
-                            size="small" 
+                            size="medium" 
                             color="secondary" 
                             aria-label="cancel" 
                             onClick={() => this.setState({
@@ -262,7 +263,7 @@ class Task extends React.Component {
                         <Button 
                             className={classes.button}
                             variant="contained"
-                            size="small" 
+                            size="medium" 
                             color="primary" 
                             aria-label="edit" 
                             onClick={() => this.handleUpdate()}
@@ -274,7 +275,7 @@ class Task extends React.Component {
                         <Button 
                             className={classes.button}
                             variant="contained"
-                            size="small" 
+                            size="medium" 
                             color="secondary" 
                             aria-label="delete" 
                             onClick={() => {
@@ -289,7 +290,7 @@ class Task extends React.Component {
                         <Button 
                             className={`${classes.button} ${classes.greenButton}`}
                             variant="contained"
-                            size="small" 
+                            size="medium" 
                             aria-label="complete" 
                             onClick={() => this.handleComplete()}
                         >
@@ -319,7 +320,7 @@ class Task extends React.Component {
                 </CardContent>
             
                 <CardActions style={{padding: "16px"}}>     
-                    <Grid container justify="space-between" alignItems="center">
+                    <Grid container justify="space-between" alignItems="flex-end">
                         <Grid item>
                             <DueDate 
                                 handleDueDateUpdate={this.handleDueDateUpdate}

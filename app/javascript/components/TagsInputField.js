@@ -5,6 +5,10 @@ import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles(theme => ({
+    autocomplete: {
+        marginTop: 16,
+        marginBottom: 8,
+    },
     tag: {
         margin: 3,
     },
@@ -18,9 +22,11 @@ const TagsInputField = (props) => {
 
     return (
         <Autocomplete
+            className={classes.auocomplete}
             multiple
             freeSolo
             id="tags-filled"
+            margin="normal"
             options={props.allTags.map(tag => tag.name)}
             onKeyPress={event => {
                 if (event.key === 'Enter') event.preventDefault();

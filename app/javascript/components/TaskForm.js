@@ -1,7 +1,9 @@
 import React from "react";
 import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 
 import TagsInputField from "../components/TagsInputField";
+import DueDate from "../components/DueDate";
 
 const validateForm = (title, description) => {
     const errors = {}
@@ -25,7 +27,6 @@ const TaskForm = (props) => {
     let tags;
 
     title = <TextField 
-                id="outlined-full-width" 
                 variant="outlined"
                 fullWidth 
                 label="Title"
@@ -44,7 +45,6 @@ const TaskForm = (props) => {
             />
 
     description = <TextField 
-                    id="outlined-full-width" 
                     variant="outlined"
                     fullWidth 
                     multiline
@@ -68,12 +68,44 @@ const TaskForm = (props) => {
                     label="Add tags"
             />
     
+    let dueDateAndButtons;
+    if (props.isNewTaskForm) {
+        dueDateAndButtons = <React.Fragment>
+                                <Grid item xs={4}>
+                                        <DueDate 
+                                            handleDueDateUpdate={props.handleDueDateUpdate}
+                                            due_date={props.due_date}
+                                        />
+                                    </Grid>
+
+                                    <Grid item>
+                                        {props.buttons}
+                                    </Grid>
+                            </React.Fragment>
+    } else {
+        dueDateAndButtons = null;
+    }
+
     return (
         <React.Fragment>
-            {title}
-            {description}
-            {tags}
+        <Grid container justify="space-between" alignItems="flex-end">
+            <Grid item xs={12}>
+                {title}
+            </Grid>
+
+            <Grid item xs={12}>
+                {description}
+            </Grid>
+
+            <Grid item xs={12}>
+                {tags}
+            </Grid>
+
+            {dueDateAndButtons}
+             
+        </Grid>
         </React.Fragment>
+
     )
 }
 

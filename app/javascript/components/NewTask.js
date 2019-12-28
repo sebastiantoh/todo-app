@@ -2,10 +2,8 @@ import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import Grid from '@material-ui/core/Grid';
 
 import {validateForm, TaskForm} from "../components/TaskForm";
-import DueDate from "../components/DueDate";
 
 const styles = {
     root: {
@@ -52,7 +50,18 @@ class NewTask extends React.Component {
     
     render() {
         const { classes } = this.props;
-
+        
+        const buttons = <Button 
+                            className={classes.button}
+                            variant="contained"
+                            size="large" 
+                            color="primary" 
+                            aria-label="add" 
+                            type="submit"
+                        >
+                            <AddIcon />
+                            &nbsp;Add New Task 
+                        </Button>
         return (
             <form 
                 className={classes.root}
@@ -83,34 +92,18 @@ class NewTask extends React.Component {
                     title={this.state.title}
                     description={this.state.description}
                     tag_list={this.state.tag_list}
+                    due_date={this.state.due_date}
                     allTags={this.props.allTags}
                     errors={this.state.errors}
                     handleTitleUpdate={this.handleTitleUpdate}
                     handleDescriptionUpdate={this.handleDescriptionUpdate}
                     handleTagUpdate={this.handleTagUpdate}
+                    handleDueDateUpdate={this.handleDueDateUpdate}
+                    buttons={buttons}
+                    isNewTaskForm={true}
                 />
 
-                <Grid container justify="space-between" alignItems="center">
-                    <Grid item>
-                        <DueDate 
-                            handleDueDateUpdate={this.handleDueDateUpdate}
-                            due_date={this.state.due_date}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Button 
-                            className={classes.button}
-                            variant="contained"
-                            size="small" 
-                            color="primary" 
-                            aria-label="add" 
-                            type="submit"
-                        >
-                            <AddIcon />
-                            &nbsp;Add New Task 
-                        </Button>
-                    </Grid>
-                </Grid> 
+                
             </form>
         )
     }
