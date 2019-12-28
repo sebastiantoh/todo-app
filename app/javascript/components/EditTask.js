@@ -108,6 +108,7 @@ class EditTask extends React.Component {
                             handleTitleUpdate={this.handleTitleUpdate}
                             handleDescriptionUpdate={this.handleDescriptionUpdate}
                             handleTagUpdate={this.handleTagUpdate}
+                            handleDueDateUpdate={this.handleDueDateUpdate}
                             buttons={buttons}
                         />                            
 
