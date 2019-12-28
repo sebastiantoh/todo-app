@@ -2,8 +2,10 @@ import React from "react";
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import Grid from '@material-ui/core/Grid';
 
 import {validateForm, TaskForm} from "../components/TaskForm";
+import DueDate from "../components/DueDate";
 
 const styles = {
     root: {
@@ -23,11 +25,13 @@ class NewTask extends React.Component {
             title: '',
             description: '',
             tag_list: [],
+            due_date: null,
             errors: {},
         }
         this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
         this.handleDescriptionUpdate = this.handleDescriptionUpdate.bind(this);
         this.handleTagUpdate = this.handleTagUpdate.bind(this);
+        this.handleDueDateUpdate = this.handleDueDateUpdate.bind(this);
     }
 
     handleTitleUpdate(event) {
@@ -42,6 +46,9 @@ class NewTask extends React.Component {
         this.setState({tag_list: value});
     }
     
+    handleDueDateUpdate(date) {
+        this.setState({due_date: date});
+    }
     
     render() {
         const { classes } = this.props;
@@ -63,11 +70,12 @@ class NewTask extends React.Component {
                         }
 
                         this.props.handleFormSubmit(this.state.title, 
-                            this.state.description, this.state.tag_list); 
+                            this.state.description, this.state.tag_list, this.state.due_date); 
                         this.props.handleNewNotification("Task created");
                         this.setState({title: '', 
                                 description: '', 
                                 tag_list: [],
+                                due_date: null,
                                 errors: {}})
                 }}
             >
@@ -82,23 +90,27 @@ class NewTask extends React.Component {
                     handleTagUpdate={this.handleTagUpdate}
                 />
 
-                <div style={{display: "flex",
-                            paddingBottom: 3,
-                            }}
-                >
-                    <Button 
-                        className={classes.button}
-                        variant="contained"
-                        size="small" 
-                        color="primary" 
-                        aria-label="add" 
-                        type="submit"
-                    >
-                        <AddIcon />
-                        &nbsp;Add New Task 
-                    </Button>
-                </div>
-
+                <Grid container justify="space-between" alignItems="center">
+                    <Grid item>
+                        <DueDate 
+                            handleDueDateUpdate={this.handleDueDateUpdate}
+                            due_date={this.state.due_date}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Button 
+                            className={classes.button}
+                            variant="contained"
+                            size="small" 
+                            color="primary" 
+                            aria-label="add" 
+                            type="submit"
+                        >
+                            <AddIcon />
+                            &nbsp;Add New Task 
+                        </Button>
+                    </Grid>
+                </Grid> 
             </form>
         )
     }

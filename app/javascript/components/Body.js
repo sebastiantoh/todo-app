@@ -63,10 +63,12 @@ class Body extends React.Component {
           .then((data) => {this.setState({allTags: data })});
     }
 
-    handleFormSubmit(title, description, tag_list) {
+    handleFormSubmit(title, description, tag_list, due_date) {
         let body = JSON.stringify({task: {title: title, 
                                             description: description,
-                                            tag_list: tag_list,}
+                                            tag_list: tag_list,
+                                            due_date: due_date
+                                        }
                                     });
 
         fetch(TASKS_API_ENDPOINT, 
