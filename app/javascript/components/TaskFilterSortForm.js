@@ -81,7 +81,7 @@ const TaskFilterSortForm = (props) => {
                                                             event.target.value)
                                             }}                                    >
                                             <MenuItem value={"dateCreatedAsc"}>Date Created (Ascending)</MenuItem>
-                                            <MenuItem value={"dateCreatedDsc"}>Date Created (Dscending)</MenuItem>
+                                            <MenuItem value={"dateCreatedDsc"}>Date Created (Descending)</MenuItem>
                                             <MenuItem value={"titleAsc"}>Title (A-Z)</MenuItem>
                                             <MenuItem value={"titleDsc"}>Title (Z-A)</MenuItem>
                                             <MenuItem value={"tagsAsc"}>Number of Tags (Ascending)</MenuItem>
