@@ -80,14 +80,16 @@ const TaskFilterSortForm = (props) => {
                                                             props.hideCompletedTasks,
                                                             event.target.value)
                                             }}                                    >
-                                            <MenuItem value={"dateCreatedAsc"}>Date created (Ascending)</MenuItem>
-                                            <MenuItem value={"dateCreatedDsc"}>Date created (Dscending)</MenuItem>
+                                            <MenuItem value={"dateCreatedAsc"}>Date Created (Ascending)</MenuItem>
+                                            <MenuItem value={"dateCreatedDsc"}>Date Created (Dscending)</MenuItem>
                                             <MenuItem value={"titleAsc"}>Title (A-Z)</MenuItem>
                                             <MenuItem value={"titleDsc"}>Title (Z-A)</MenuItem>
                                             <MenuItem value={"tagsAsc"}>Number of Tags (Ascending)</MenuItem>
                                             <MenuItem value={"tagsDsc"}>Number of Tags (Descending)</MenuItem>
                                             <MenuItem value={"completedAsc"}>Completed Tasks First</MenuItem>
                                             <MenuItem value={"completedDsc"}>Uncompleted Tasks First</MenuItem>
+                                            <MenuItem value={"dueDateAsc"}>Due Date (Ascending)</MenuItem>
+                                            <MenuItem value={"dueDateDsc"}>Due Date (Descending)</MenuItem>
                                         </Select>
                                     }
                                 />
@@ -155,8 +157,32 @@ const taskSortKey = {
                     return 0;
                 }
             }),
-
-
+    dueDateAsc: (tasks) => tasks.slice().sort(
+            (task1, task2) => {
+                // tasks without due dates always at the end
+                if (task1.due_date == null) {
+                    return 1;
+                }
+                if (task2.due_date == null) {
+                    return -1;
+                }
+                let date1 = new Date(task1.due_date);
+                let date2 = new Date(task2.due_date);
+                return Math.sign(date1 - date2);
+            }),
+    dueDateDsc: (tasks) => tasks.slice().sort(
+            (task1, task2) => {
+                // tasks without due dates always at the end
+                if (task1.due_date == null) {
+                    return 1;
+                }
+                if (task2.due_date == null) {
+                    return -1;
+                }
+                let date1 = new Date(task1.due_date);
+                let date2 = new Date(task2.due_date);
+                return Math.sign(date2 - date1);
+        }),
 }
 
 export {
