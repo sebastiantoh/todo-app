@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -254,5 +255,13 @@ class Task extends React.Component {
         )
     }
 }
+
+Task.propTypes = {
+    task: PropTypes.object,
+    allTags: PropTypes.array,
+    handleUpdate: PropTypes.func,
+    handleDelete: PropTypes.func,
+    handleNewNotification: PropTypes.func,
+};
 
 export default withStyles(styles)(Task);

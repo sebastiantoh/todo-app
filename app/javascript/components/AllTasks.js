@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -48,6 +49,14 @@ const AllTasks = (props) => {
             {tasks}
         </GridList>        
     )
+};
+
+AllTasks.propTypes = {
+    tasks: PropTypes.array,
+    allTags: PropTypes.array,
+    handleUpdate: PropTypes.func,
+    handleDelete: PropTypes.func, 
+    handleNewNotification: PropTypes.func,
 };
 
 export default AllTasks;

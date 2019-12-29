@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
@@ -118,6 +119,14 @@ class EditTask extends React.Component {
             </React.Fragment>  
         )
     }
+}
+
+EditTask.propTypes = {
+    task: PropTypes.object,
+    allTags: PropTypes.array,
+    toggleTaskEditability: PropTypes.func,
+    handleSaveTaskUpdate: PropTypes.func,
+    handleNewNotification: PropTypes.func,
 }
 
 export default withStyles(styles)(EditTask);

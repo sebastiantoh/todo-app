@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -107,4 +108,12 @@ class NewTask extends React.Component {
         )
     }
 }
+
+NewTask.propTypes = {
+    allTags: PropTypes.array,
+    handleFormSubmit: PropTypes.func,
+    handleNewNotification: PropTypes.func, 
+};
+
+
 export default withStyles(styles)(NewTask);

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -38,5 +39,12 @@ const Notification = (props) => {
         />
     )
 }
+
+Notification.propTypes = {
+    notificationActive: PropTypes.bool,
+    currNotification: PropTypes.string,
+    handleNotificationClose: PropTypes.func,
+    handleNotificationExited: PropTypes.func,
+};
 
 export default Notification;

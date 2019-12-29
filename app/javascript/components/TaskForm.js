@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
@@ -101,6 +102,20 @@ const TaskForm = (props) => {
         </React.Fragment>
 
     )
+}
+
+TaskForm.propTypes = {
+    title: PropTypes.string,
+    description: PropTypes.string,
+    tag_list: PropTypes.array,
+    due_date: PropTypes.string,
+    errors: PropTypes.object,
+    allTags: PropTypes.array,
+    handleTitleUpdate: PropTypes.func,
+    handleDescriptionUpdate: PropTypes.func,
+    handleTagUpdate: PropTypes.func,
+    handleDueDateUpdate: PropTypes.func,
+    buttons: PropTypes.element,
 }
 
 export {

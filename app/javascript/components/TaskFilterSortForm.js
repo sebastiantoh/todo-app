@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
@@ -114,6 +115,15 @@ const TaskFilterSortForm = (props) => {
         </React.Fragment>
     )    
 }
+
+TaskFilterSortForm.propTypes = {
+    allTags: PropTypes.array,
+    filterQuery: PropTypes.string,
+    filterTags: PropTypes.array,
+    sortQuery: PropTypes.string,
+    handleFilterSortForm: PropTypes.func,
+    hideCompletedTasks: PropTypes.bool,
+};
 
 const taskSortKey = {
     dateCreatedAsc: (tasks) => tasks.slice().sort(

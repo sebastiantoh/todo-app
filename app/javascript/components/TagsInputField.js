@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
@@ -58,4 +59,10 @@ const TagsInputField = (props) => {
     )
 }
 
+TagsInputField.propTypes = {
+    allTags: PropTypes.array, 
+    tag_list: PropTypes.array,
+    handleTagUpdate: PropTypes.func,
+    label: PropTypes.string,
+}
 export default TagsInputField;
