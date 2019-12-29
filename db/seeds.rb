@@ -7,22 +7,47 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 Task.create(
-    title: "Grocery Shopping", 
-    description: "Buy 1 carton of milk and some eggs",
-    tag_list: ["Personal"])
+    title: "Learn to bake a cake", 
+    description: "Find recipes online and purchase necessary ingredients and equipment.",
+    tag_list: ["Personal", "baking"])
+
+# no due date
+Task.create(
+    title: "Grocery Shopping: ingredients for a simple vanilla cake", 
+    description: "Unsalted Butter
+    Canola Oil (substitutable with vegetable oil)
+    Sugar
+    Salt
+    Eggs (at least 4 required)
+    Vanilla Extract
+    All-Purpose Flour
+    Baking Powder
+    Buttermilk",
+    tag_list: ["Personal", "baking", "shopping"]).toggle!(:completed)
+
+# overdue, but completed
+Task.create(
+    title: "Academic Declaration", 
+    description: "Declare using EduRec portal. 
+    Must complete at least 24 hours before Module Registration Exercise.
+    Opens from 29 December 2019.",
+    tag_list: ["School", "Important"],
+    due_date: "2019-12-30T12:00:00+08:00").toggle!(:completed)
 
 Task.create(
     title: "Module Registration", 
-    description: "testing empty tags",
-    tag_list: ["School"],
+    description: "Register using EduRec portal",
+    tag_list: ["School", "Important"],
     due_date: "2020-01-03T12:00:00+08:00")
 
+# multiple tags
 Task.create(
     title: "Module Planning", 
     description: "Research on possible modules to take for the coming semester.",
-    tag_list: ["Urgent", "School"],
+    tag_list: ["School", "Important"],
     due_date: "2020-01-02T12:00:00+08:00")
 
+# overdue task, but completed
 Task.create(
     title: "CVWO Mid-Assignment Writeup", 
     description: "Include: basic use cases and execution plan",
@@ -32,27 +57,31 @@ Task.create(
 Task.create(
     title: "CVWO Assignment Writeup", 
     description: "Include: accomplishments as well as a short user manual",
-    tag_list: ["Urgent", "School"],
+    tag_list: ["School", "Important"],
     due_date: "2020-01-25T23:59:59+08:00")
 
+# overdue, but not completed. should show indication that task is overdue.
 Task.create(
     title: "Schedule Dentist Appointment", 
     description: "For routine scaling and polishing",
     tag_list: ["Personal", "Recurring"],
-    due_date: "2019-12-05T23:59:59+08:00").toggle!(:completed)
+    due_date: "2019-12-05T23:59:59+08:00")
+
 
 Task.create(
     title: "Prepare for the new school term", 
     description: "Read ahead for modules",
-    tag_list: ["Personal"])
+    tag_list: ["School"])
 
+
+# multi-line description. each line should be rendered on a new line.
 Task.create(
     title: "Lorem ipsum dolor sit amet", 
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet dapibus dolor. 
     Nulla sit amet nisl ut diam condimentum cursus. Pellentesque id justo eu lorem rhoncus bibendum ut et massa. 
-    \nProin dignissim elit et turpis porttitor porttitor. Donec rhoncus ligula et tempor pretium. 
+    Proin dignissim elit et turpis porttitor porttitor. Donec rhoncus ligula et tempor pretium. 
     Aenean porta ante convallis efficitur ullamcorper.",
-    tag_list: ["random", "recurring"])
+    tag_list: ["Random", "Recurring"])
 
 Task.create(
     title: "Donec dignissim porta malesuada ", 
@@ -60,7 +89,6 @@ Task.create(
     tag_list: [])
 
 # below tasks should not appear due to invalid input
-
 Task.create(
     title: "Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. Mauris maximus. ", 
     description: "orem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mattis nulla nibh, eget varius elit porttitor sed. Ut sit amet. ",

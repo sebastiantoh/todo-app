@@ -10,8 +10,8 @@ const validateForm = (title, description) => {
 
     if (title.length === 0) {
         errors.title = "Title cannot be empty."
-    } else if (title.length > 50) {
-        errors.title = "Please keep your title to within 50 characters."
+    } else if (title.length > 100) {
+        errors.title = "Please keep your title to within 100 characters."
     }
 
     if (description.length === 0) {
