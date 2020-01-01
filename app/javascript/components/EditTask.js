@@ -103,7 +103,8 @@ class EditTask extends React.Component {
                             title={this.state.title}
                             description={this.state.description}
                             tag_list={this.state.tag_list}
-                            due_date={this.state.due_date}
+                            // if due_date is null, return null. Else convert to date.
+                            due_date={this.state.due_date && new Date(this.state.due_date)}
                             allTags={this.props.allTags}
                             errors={this.state.errors}
                             handleTitleUpdate={this.handleTitleUpdate}

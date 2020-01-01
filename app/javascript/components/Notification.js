@@ -42,7 +42,7 @@ const Notification = (props) => {
 
 Notification.propTypes = {
     notificationActive: PropTypes.bool,
-    currNotification: PropTypes.string,
+    currNotification: PropTypes.object,
     handleNotificationClose: PropTypes.func,
     handleNotificationExited: PropTypes.func,
 };

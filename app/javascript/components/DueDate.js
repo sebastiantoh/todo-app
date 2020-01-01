@@ -37,7 +37,7 @@ const DueDate = (props) => {
 
 DueDate.propTypes = {
     handleDueDateUpdate: PropTypes.func,
-    due_date: PropTypes.string,
+    due_date: PropTypes.instanceOf(Date),
     completed: PropTypes.bool,
 }
 

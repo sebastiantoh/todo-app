@@ -108,7 +108,7 @@ TaskForm.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     tag_list: PropTypes.array,
-    due_date: PropTypes.string,
+    due_date: PropTypes.instanceOf(Date),
     errors: PropTypes.object,
     allTags: PropTypes.array,
     handleTitleUpdate: PropTypes.func,

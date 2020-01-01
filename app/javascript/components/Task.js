@@ -182,7 +182,7 @@ class Task extends React.Component {
                                     size="medium" 
                                     color="primary" 
                                     aria-label="edit" 
-                                    onClick={() => this.toggleTaskEditability()}
+                                    onClick={this.toggleTaskEditability}
                                 >
                                     <EditIcon />
                                     &nbsp;Edit
@@ -208,7 +208,7 @@ class Task extends React.Component {
                                     variant="contained"
                                     size="medium" 
                                     aria-label="complete" 
-                                    onClick={() => this.handleTaskCompletionStatusUpdate()}
+                                    onClick={this.handleTaskCompletionStatusUpdate}
                                 >
                                     {this.props.task.completed
                                         ? <React.Fragment>
@@ -228,7 +228,8 @@ class Task extends React.Component {
                                     <Grid item>
                                         <DueDate 
                                             handleDueDateUpdate={this.handleDueDateUpdate}
-                                            due_date={this.props.task.due_date}
+                                            // if due_date is null, return null. Else convert to date.
+                                            due_date={this.props.task.due_date && new Date(this.props.task.due_date)}
                                             completed={this.props.task.completed}
                                         />
                                     </Grid>

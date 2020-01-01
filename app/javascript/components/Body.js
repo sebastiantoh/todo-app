@@ -33,7 +33,10 @@ class Body extends React.Component {
             hideCompletedTasks: false,
             allTags: [],
             notificationActive: false,
-            currNotification: "",
+            currNotification: {
+                message: "", 
+                key: null,
+            },
             notificationQueue: [],
         };
 
@@ -87,7 +90,7 @@ class Body extends React.Component {
         const tasks = this.state.tasks.slice();
         tasks.push(task);
         this.setState({tasks: tasks}, 
-                () => this.filterAndSortTasks()
+            this.filterAndSortTasks
         );
         this.getAllTags(); 
     }
@@ -110,7 +113,7 @@ class Body extends React.Component {
         tasks[idx] = updatedTask;
 
         this.setState({tasks: tasks}, 
-                () => this.filterAndSortTasks()
+            this.filterAndSortTasks
         )
         this.getAllTags(); 
     }
@@ -128,7 +131,7 @@ class Body extends React.Component {
     deleteTask(id) {
         let newTasks = this.state.tasks.filter((task => task.id != id))
         this.setState({tasks: newTasks}, 
-                () => this.filterAndSortTasks()
+            this.filterAndSortTasks
         );
         this.getAllTags(); 
     }
@@ -138,7 +141,7 @@ class Body extends React.Component {
                 filterTags: filterTags,
                 hideCompletedTasks: hideCompletedTasks,
                 sortQuery: sortQuery}, 
-            () => this.filterAndSortTasks()
+            this.filterAndSortTasks
         );
     }
 
