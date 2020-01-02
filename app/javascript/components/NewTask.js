@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import { isEqual, sortBy } from 'lodash-es';
+
 
 import {validateForm, TaskForm} from "../components/TaskForm";
 
@@ -47,6 +49,14 @@ class NewTask extends React.Component {
     
     handleDueDateUpdate(date) {
         this.setState({due_date: date});
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        // if allTags changed, update.
+        // if state changed, update.
+        // compare 2 arrays by sorting them first
+        return !(isEqual(sortBy(this.props.allTags), sortBy(nextProps.allTags))) 
+        || !(isEqual(this.state, nextState))
     }
     
     render() {

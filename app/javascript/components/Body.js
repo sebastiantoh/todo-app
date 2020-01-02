@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider'; 
 import Typography from '@material-ui/core/Typography';
+import { isEqual, sortBy } from 'lodash-es';
 
 import AllTasks from "../components/AllTasks";
 import NewTask from "../components/NewTask";
@@ -94,7 +95,12 @@ class Body extends React.Component {
         this.setState({tasks: tasks}, 
             this.filterAndSortTasks
         );
-        this.getAllTags(); 
+            
+        // only update allTags if new task has tags (optimization purposes)
+        if (task.tag_list.length > 0) {
+            this.getAllTags(); 
+        }
+        
     }
 
     handleUpdate(task){
@@ -113,13 +119,19 @@ class Body extends React.Component {
         const tasks = this.state.tasks.slice();
         // index of task to be updated
         let idx = tasks.map((task) => task.id).indexOf(updatedTask.id)
+        
+        let origTask = tasks[idx];
         tasks[idx] = updatedTask;
 
         // after updating state, filter and sort tasks.
         this.setState({tasks: tasks}, 
             this.filterAndSortTasks
         )
-        this.getAllTags(); 
+
+        // update allTags only if tag_list changed
+        if (!(isEqual(sortBy(origTask.tag_list), sortBy(updatedTask.tag_list)))) {
+            this.getAllTags();
+        }
     }
 
     handleDelete(id){

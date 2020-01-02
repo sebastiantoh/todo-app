@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 
 import TagsInputField from "../components/TagsInputField";
 
-const TaskFilterSortForm = (props) => {
+const TaskFilterSortForm = React.memo((props) => {
     let searchField = <TextField
                             variant="outlined"
                             fullWidth 
@@ -114,7 +114,7 @@ const TaskFilterSortForm = (props) => {
             </div>
         </React.Fragment>
     )    
-}
+})
 
 TaskFilterSortForm.propTypes = {
     allTags: PropTypes.array,

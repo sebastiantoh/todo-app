@@ -13,9 +13,11 @@ import UndoIcon from '@material-ui/icons/Undo';
 import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import { isEqual, sortBy } from 'lodash-es';
 
 import DueDate from "../components/DueDate";
 import EditTask from "../components/EditTask";
+
 
 const styles = {
     card: {
@@ -107,14 +109,15 @@ class Task extends React.Component {
     
     shouldComponentUpdate(nextProps, nextState) {
         // if editable, update only when list of tags update (so that dropdown menu can
-        // be populated during edit.)
+        // be re-populated during edit)
         if (this.state.editable) {
-            return this.props.allTags !== nextProps.allTags;
+            return !(isEqual(sortBy(this.props.allTags), sortBy(nextProps.allTags)))
         }
         // only update if task changes (can do shallow comparison because each task is immutable)
         // or if editability is toggled
         else {
-            return this.props.task != nextProps.task || this.state.editable != nextState.editable
+            return this.props.task != nextProps.task 
+            || this.state.editable != nextState.editable
         };
     }
     
