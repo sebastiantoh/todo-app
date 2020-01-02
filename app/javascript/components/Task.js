@@ -104,6 +104,21 @@ class Task extends React.Component {
         this.toggleTaskEditability();
     }
 
+    
+    shouldComponentUpdate(nextProps, nextState) {
+        // if editable, update only when list of tags update (so that dropdown menu can
+        // be populated during edit.)
+        if (this.state.editable) {
+            return this.props.allTags !== nextProps.allTags;
+        }
+        // only update if task changes (can do shallow comparison because each task is immutable)
+        // or if editability is toggled
+        else {
+            return this.props.task != nextProps.task || this.state.editable != nextState.editable
+        };
+    }
+    
+
     render() {
         const { classes } = this.props;
         let cardContent;
