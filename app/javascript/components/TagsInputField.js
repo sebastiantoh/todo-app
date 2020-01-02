@@ -26,7 +26,6 @@ const TagsInputField = (props) => {
             className={classes.auocomplete}
             multiple
             freeSolo
-            id="tags-filled"
             margin="normal"
             options={props.allTags.map(tag => tag.name)}
             onKeyPress={event => {
