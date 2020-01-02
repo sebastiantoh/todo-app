@@ -16,7 +16,7 @@ const TaskFilterSortForm = (props) => {
                             variant="outlined"
                             fullWidth 
                             margin="normal"
-                            value={props.filterQuery} // to update body: pass in these as props
+                            value={props.filterQuery}
                             onKeyPress={event => {
                                 if (event.key === 'Enter') event.preventDefault();
                             }}
@@ -139,7 +139,7 @@ const taskSortKey = {
                 return Math.sign(date2 - date1);
             }),
     titleAsc: (tasks) => tasks.slice().sort(
-            // sensitivity is to ignore casing i.e. a ≠ b, a = A
+            // ignores casing i.e. a ≠ b, a = A
             (task1, task2) => task1.title.localeCompare(task2.title, 'en', {'sensitivity': 'base'})),
     titleDsc: (tasks) => tasks.slice().sort(
             (task1, task2) => task2.title.localeCompare(task1.title, 'en', {'sensitivity': 'base'})),

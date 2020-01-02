@@ -79,7 +79,7 @@ class Body extends React.Component {
             headers: {'Content-Type': 'application/json'},
             body: body,}
         )
-        .then((response) => {return response.json()})
+        .then(response => response.json())
         .then((task)=>{
             this.addNewTask(task)
         });
@@ -89,6 +89,8 @@ class Body extends React.Component {
         // create a copy of the tasks array
         const tasks = this.state.tasks.slice();
         tasks.push(task);
+
+        // after updating state, filter and sort tasks.
         this.setState({tasks: tasks}, 
             this.filterAndSortTasks
         );
@@ -101,7 +103,8 @@ class Body extends React.Component {
             body: JSON.stringify({task: task}),
             headers: {'Content-Type': 'application/json'}}
         )
-        .then((response) => { 
+        .then(response => response.json())
+        .then((task) => { 
             this.updateTask(task)})
     }  
     
@@ -112,6 +115,7 @@ class Body extends React.Component {
         let idx = tasks.map((task) => task.id).indexOf(updatedTask.id)
         tasks[idx] = updatedTask;
 
+        // after updating state, filter and sort tasks.
         this.setState({tasks: tasks}, 
             this.filterAndSortTasks
         )
@@ -130,6 +134,8 @@ class Body extends React.Component {
 
     deleteTask(id) {
         let newTasks = this.state.tasks.filter((task => task.id != id))
+
+        // after updating state, filter and sort tasks.
         this.setState({tasks: newTasks}, 
             this.filterAndSortTasks
         );
