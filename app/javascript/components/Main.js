@@ -1,10 +1,10 @@
-import React from "react"
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 
 import Body from "../components/Body";
 
-const Main = (props) => {
+const Main = props => {
     return (
         <Container fixed>
             <Typography variant="h3" component="h1" gutterBottom>
@@ -14,6 +14,6 @@ const Main = (props) => {
             <Body />
         </Container>
     );
-}
+};
 
 export default Main;
