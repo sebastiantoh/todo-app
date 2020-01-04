@@ -109,13 +109,14 @@ class Task extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         /*
-        If editable, update only when list of tags update (so that dropdown menu can
-        be re-populated during edit)
+        If editable, update only when user clicks cancel OR list of tags updates 
+        (so that dropdown menu can be re-populated during edit) 
         */
+
         if (this.state.editable) {
-            return !isEqual(
-                sortBy(this.props.allTags),
-                sortBy(nextProps.allTags)
+            return (
+                this.state.editable != nextState.editable ||
+                !isEqual(sortBy(this.props.allTags), sortBy(nextProps.allTags))
             );
         } else {
             /*
