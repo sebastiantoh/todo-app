@@ -6,10 +6,6 @@ import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles(theme => ({
-    autocomplete: {
-        marginTop: 16,
-        marginBottom: 8
-    },
     tag: {
         margin: 3
     }
@@ -18,23 +14,26 @@ const useStyles = makeStyles(theme => ({
 const TagsInputField = props => {
     const classes = useStyles();
 
+    /* 
+    Params: inputTag (represented by a string)
+    Returns the frequency of the input tag.
+    */
     const taggingCount = inputTag =>
         props.allTags.filter(tag => tag.name == inputTag)[0].taggings_count;
 
     return (
         <Autocomplete
-            className={classes.auocomplete}
-            multiple
-            freeSolo
+            multiple // Allow multiple selection from dropdown
+            freeSolo // Allow user to input custom values not in dropdown
             margin="normal"
             options={props.allTags.map(tag => tag.name)}
+            renderOption={tag => `${tag} [${taggingCount(tag)}]`}
             onKeyPress={event => {
                 if (event.key === "Enter") event.preventDefault();
             }}
-            // convert tags to lowercase, remove duplicates, and map back to array
+            // Convert tags to lowercase, remove duplicates, and map back to array
             value={[...new Set(props.tag_list.map(tag => tag.toLowerCase()))]}
             onChange={props.handleTagUpdate}
-            renderOption={tag => `${tag} [${taggingCount(tag)}]`}
             renderTags={(value, getTagProps) =>
                 value.map((tag, index) => (
                     <Chip
@@ -59,8 +58,8 @@ const TagsInputField = props => {
 };
 
 TagsInputField.propTypes = {
-    allTags: PropTypes.array,
-    tag_list: PropTypes.array,
+    allTags: PropTypes.array, // array of Tag objects
+    tag_list: PropTypes.array, // array of strings
     handleTagUpdate: PropTypes.func,
     label: PropTypes.string
 };

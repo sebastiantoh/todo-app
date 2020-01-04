@@ -6,6 +6,11 @@ import Grid from "@material-ui/core/Grid";
 import TagsInputField from "../components/TagsInputField";
 import DueDate from "../components/DueDate";
 
+/* 
+Params: task title, and task description to be validated
+Returns an object with keys "title" or "description" if either title or description
+is invalid. If both are valid, an empty object is returned.
+*/
 const validateForm = (title, description) => {
     const errors = {};
 
@@ -38,9 +43,9 @@ const TaskForm = props => {
                 if (event.key === "Enter") event.preventDefault();
             }}
             onChange={props.handleTitleUpdate}
-            // convert string to boolean
+            // Convert string to boolean
             error={!!props.errors.title}
-            // render error message if there is, else render empty.
+            // Render error message if there is, else render nothing.
             helperText={props.errors.title || ""}
         />
     );
@@ -57,9 +62,9 @@ const TaskForm = props => {
                 if (event.key === "Enter") event.preventDefault();
             }}
             onChange={props.handleDescriptionUpdate}
-            // convert string to boolean
+            // Convert string to boolean
             error={!!props.errors.description}
-            // render error message if there is, else render empty.
+            // Render error message if there is, else render nothing.
             helperText={props.errors.description || ""}
         />
     );
@@ -92,8 +97,12 @@ const TaskForm = props => {
                     <DueDate
                         handleDueDateUpdate={props.handleDueDateUpdate}
                         due_date={props.due_date}
-                        // false is so that warning for overdue tasks will not be rendered
-                        completed={false}
+                        /* 
+                        True is so that warning for overdue tasks
+                        will not be rendered in the form when editing completed
+                        and overdue tasks
+                        */
+                        completed={true}
                     />
                 </Grid>
 
@@ -106,10 +115,10 @@ const TaskForm = props => {
 TaskForm.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
-    tag_list: PropTypes.array,
+    tag_list: PropTypes.array, // array of strings
     due_date: PropTypes.instanceOf(Date),
     errors: PropTypes.object,
-    allTags: PropTypes.array,
+    allTags: PropTypes.array, // array of Tag objects
     handleTitleUpdate: PropTypes.func,
     handleDescriptionUpdate: PropTypes.func,
     handleTagUpdate: PropTypes.func,

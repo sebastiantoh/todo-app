@@ -51,8 +51,8 @@ const AllTasks = props => {
 };
 
 AllTasks.propTypes = {
-    tasks: PropTypes.array,
-    allTags: PropTypes.array,
+    tasks: PropTypes.array, // array of Task objects
+    allTags: PropTypes.array, // array of Tag objects
     handleUpdate: PropTypes.func,
     handleDelete: PropTypes.func,
     handleNewNotification: PropTypes.func

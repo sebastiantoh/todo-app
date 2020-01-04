@@ -44,8 +44,8 @@ class EditTask extends React.Component {
     }
 
     /* 
-    when in editing mode: only updates due date if user clicks on save.
-    when in non-editing mode (Task component): any changes will be immediately
+    When in editing mode: only updates due date if user clicks on save.
+    When in non-editing mode (Task component): any changes will be immediately
     saved
     */
     handleDueDateUpdate(date) {
@@ -70,7 +70,7 @@ class EditTask extends React.Component {
                             this.state.title,
                             this.state.description
                         );
-                        // check if there are any keys (which corresponds to errors)
+                        // Check if there are any keys (which corresponds to errors)
                         if (Object.keys(errors).length > 0) {
                             this.setState({ errors: errors });
                             return;
@@ -108,7 +108,7 @@ class EditTask extends React.Component {
                 title={this.state.title}
                 description={this.state.description}
                 tag_list={this.state.tag_list}
-                // if due_date is null, return null. Else convert to date.
+                // If due_date is null, return null. Else convert to date.
                 due_date={this.state.due_date && new Date(this.state.due_date)}
                 allTags={this.props.allTags}
                 errors={this.state.errors}
@@ -126,7 +126,7 @@ class EditTask extends React.Component {
 
 EditTask.propTypes = {
     task: PropTypes.object,
-    allTags: PropTypes.array,
+    allTags: PropTypes.array, // array of Tag objects
     toggleTaskEditability: PropTypes.func,
     handleSaveTaskUpdate: PropTypes.func,
     handleNewNotification: PropTypes.func

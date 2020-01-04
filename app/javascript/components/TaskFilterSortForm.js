@@ -8,6 +8,7 @@ import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
+import clone from "lodash-es";
 
 import TagsInputField from "../components/TagsInputField";
 
@@ -140,55 +141,52 @@ const TaskFilterSortForm = React.memo(props => {
 });
 
 TaskFilterSortForm.propTypes = {
-    allTags: PropTypes.array,
+    allTags: PropTypes.array, // array of Tag objects
     filterQuery: PropTypes.string,
-    filterTags: PropTypes.array,
+    filterTags: PropTypes.array, // array of strings
     sortQuery: PropTypes.string,
     handleFilterSortForm: PropTypes.func,
     hideCompletedTasks: PropTypes.bool
 };
 
 const taskSortKey = {
+    // A copy of the task is always created first.
     dateCreatedAsc: tasks =>
-        tasks.slice().sort((task1, task2) => {
+        clone(tasks).sort((task1, task2) => {
             let date1 = new Date(task1.created_at);
             let date2 = new Date(task2.created_at);
             return Math.sign(date1 - date2);
         }),
     dateCreatedDsc: tasks =>
-        tasks.slice().sort((task1, task2) => {
+        clone(tasks).sort((task1, task2) => {
             let date1 = new Date(task1.created_at);
             let date2 = new Date(task2.created_at);
             return Math.sign(date2 - date1);
         }),
     titleAsc: tasks =>
-        tasks.slice().sort(
-            // ignores casing i.e. a ≠ b, a = A
+        clone(tasks).sort(
+            // Ignores casing i.e. a ≠ b, a = A
             (task1, task2) =>
                 task1.title.localeCompare(task2.title, "en", {
                     sensitivity: "base"
                 })
         ),
     titleDsc: tasks =>
-        tasks.slice().sort((task1, task2) =>
+        clone(tasks).sort((task1, task2) =>
             task2.title.localeCompare(task1.title, "en", {
                 sensitivity: "base"
             })
         ),
     tagsAsc: tasks =>
-        tasks
-            .slice()
-            .sort(
-                (task1, task2) => task1.tag_list.length - task2.tag_list.length
-            ),
+        clone(tasks).sort(
+            (task1, task2) => task1.tag_list.length - task2.tag_list.length
+        ),
     tagsDsc: tasks =>
-        tasks
-            .slice()
-            .sort(
-                (task1, task2) => task2.tag_list.length - task1.tag_list.length
-            ),
+        clone(tasks).sort(
+            (task1, task2) => task2.tag_list.length - task1.tag_list.length
+        ),
     completedAsc: tasks =>
-        tasks.slice().sort((task1, task2) => {
+        clone(tasks).sort((task1, task2) => {
             if (task1.completed) {
                 return -1;
             } else if (task2.completed) {
@@ -198,7 +196,7 @@ const taskSortKey = {
             }
         }),
     completedDsc: tasks =>
-        tasks.slice().sort((task1, task2) => {
+        clone(tasks).sort((task1, task2) => {
             if (task2.completed) {
                 return -1;
             } else if (task1.completed) {
@@ -208,8 +206,8 @@ const taskSortKey = {
             }
         }),
     dueDateAsc: tasks =>
-        tasks.slice().sort((task1, task2) => {
-            // tasks without due dates always at the end
+        clone(tasks).sort((task1, task2) => {
+            // Tasks without due dates always at the end
             if (task1.due_date == null) {
                 return 1;
             }
@@ -221,8 +219,8 @@ const taskSortKey = {
             return Math.sign(date1 - date2);
         }),
     dueDateDsc: tasks =>
-        tasks.slice().sort((task1, task2) => {
-            // tasks without due dates always at the end
+        clone(tasks).sort((task1, task2) => {
+            // Tasks without due dates always at the end
             if (task1.due_date == null) {
                 return 1;
             }

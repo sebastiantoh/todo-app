@@ -49,7 +49,7 @@ class Task extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editable: false
+            editable: false // Whether task can currently be edited by user
         };
 
         this.handleTaskCompletionStatusUpdate = this.handleTaskCompletionStatusUpdate.bind(
@@ -61,37 +61,39 @@ class Task extends React.Component {
         this.handleSaveTaskUpdate = this.handleSaveTaskUpdate.bind(this);
     }
 
+    // Updates new task with updated completion status to backend
     handleTaskCompletionStatusUpdate() {
+        // Create a copy of current task, and negate current task completion status
         let task = {
             ...this.props.task,
             completed: !this.props.task.completed
         };
-        // updates new task completion status to backend
         this.props.handleUpdate(task);
     }
 
+    // Updates new task with updated tag list to backend
     handleTagDelete(deletedTag) {
         let updatedTagList = this.props.task.tag_list.filter(
             tag => deletedTag !== tag
         );
         let task = { ...this.props.task, tag_list: updatedTagList };
-        // updates new tag list to backend
         this.props.handleUpdate(task);
     }
 
+    // Updates new task with updated due date to backend
     handleDueDateUpdate(date) {
         let task = { ...this.props.task, due_date: date };
-        // updates new due dateto backend
         this.props.handleUpdate(task);
     }
 
-    // called when user clicks "Save" or "Cancel"
+    // Called when user clicks "Save" or "Cancel"
     toggleTaskEditability() {
         this.setState({
             editable: !this.state.editable
         });
     }
 
+    // Updates new task details to backend
     handleSaveTaskUpdate(title, description, tag_list, completed, due_date) {
         let task = {
             id: this.props.task.id,
@@ -101,23 +103,25 @@ class Task extends React.Component {
             completed: completed,
             due_date: due_date
         };
-        // updates new task details to backend
         this.props.handleUpdate(task);
         this.toggleTaskEditability();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        // if editable, update only when list of tags update (so that dropdown menu can
-        // be re-populated during edit)
+        /*
+        If editable, update only when list of tags update (so that dropdown menu can
+        be re-populated during edit)
+        */
         if (this.state.editable) {
             return !isEqual(
                 sortBy(this.props.allTags),
                 sortBy(nextProps.allTags)
             );
-        }
-        // only update if task changes (can do shallow comparison because each task is immutable)
-        // or if editability is toggled
-        else {
+        } else {
+            /*
+            Only update if task changes (can do shallow comparison because each task is immutable)
+            or if editability is toggled
+            */
             return (
                 this.props.task != nextProps.task ||
                 this.state.editable != nextState.editable
@@ -154,6 +158,7 @@ class Task extends React.Component {
                     gutterBottom
                     component="h2"
                     style={
+                        // Greyish font color to indicate completed task
                         this.props.task.completed
                             ? { color: "#949494" }
                             : undefined
@@ -163,7 +168,7 @@ class Task extends React.Component {
                 </Typography>
             );
 
-            // to render new lines correctly
+            // To render new lines correctly
             description = this.props.task.description
                 .split("\n")
                 .map((i, key) => (
@@ -173,6 +178,7 @@ class Task extends React.Component {
                         gutterBottom
                         component="p"
                         style={
+                            // Greyish font color to indicate completed task
                             this.props.task.completed
                                 ? { color: "#949494" }
                                 : undefined
@@ -191,6 +197,7 @@ class Task extends React.Component {
                             key={index}
                             className={classes.tag}
                             style={
+                                // Greyish font color to indicate completed task
                                 this.props.task.completed
                                     ? { color: "#949494" }
                                     : undefined
@@ -270,7 +277,7 @@ class Task extends React.Component {
                         <Grid item>
                             <DueDate
                                 handleDueDateUpdate={this.handleDueDateUpdate}
-                                // if due_date is null, return null. Else convert to date.
+                                // If due_date is null, return null. Else convert to date.
                                 due_date={
                                     this.props.task.due_date &&
                                     new Date(this.props.task.due_date)
@@ -290,6 +297,7 @@ class Task extends React.Component {
                 variant="outlined"
                 elevation={3}
                 style={
+                    // Greyish background to indicate completed task
                     this.props.task.completed
                         ? { backgroundColor: "#f6f6f6" }
                         : undefined
@@ -305,7 +313,7 @@ class Task extends React.Component {
 
 Task.propTypes = {
     task: PropTypes.object,
-    allTags: PropTypes.array,
+    allTags: PropTypes.array, // array of Tag objects
     handleUpdate: PropTypes.func,
     handleDelete: PropTypes.func,
     handleNewNotification: PropTypes.func

@@ -51,9 +51,10 @@ class NewTask extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        // if allTags changed, update.
-        // if state changed, update.
-        // compare 2 arrays by sorting them first
+        /*
+        If allTags changed, update. If state changed, update.
+        Compare 2 arrays by sorting them first
+        */
         return (
             !isEqual(sortBy(this.props.allTags), sortBy(nextProps.allTags)) ||
             !isEqual(this.state, nextState)
@@ -81,6 +82,7 @@ class NewTask extends React.Component {
                 className={classes.root}
                 autoComplete="off"
                 onSubmit={event => {
+                    // To prevent form submission from pressing "Enter"
                     event.preventDefault();
 
                     const errors = validateForm(
@@ -88,19 +90,24 @@ class NewTask extends React.Component {
                         this.state.description
                     );
 
-                    // check if there are any keys (which corresponds to errors)
+                    // Check if there are any keys (which corresponds to errors)
                     if (Object.keys(errors).length > 0) {
                         this.setState({ errors: errors });
                         return;
                     }
 
+                    // Send new task information to backend
                     this.props.handleFormSubmit(
                         this.state.title,
                         this.state.description,
                         this.state.tag_list,
                         this.state.due_date
                     );
+
+                    // Create new notification
                     this.props.handleNewNotification("Task created");
+
+                    // Reset form input fields
                     this.setState({
                         title: "",
                         description: "",
@@ -114,7 +121,7 @@ class NewTask extends React.Component {
                     title={this.state.title}
                     description={this.state.description}
                     tag_list={this.state.tag_list}
-                    // if due_date is null, return null. Else convert to date.
+                    // If due_date is null, return null. Else convert to date.
                     due_date={
                         this.state.due_date && new Date(this.state.due_date)
                     }
@@ -132,7 +139,7 @@ class NewTask extends React.Component {
 }
 
 NewTask.propTypes = {
-    allTags: PropTypes.array,
+    allTags: PropTypes.array, // array of Tag objects
     handleFormSubmit: PropTypes.func,
     handleNewNotification: PropTypes.func
 };

@@ -18,8 +18,10 @@ const DueDate = props => {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <DateTimePicker
-                // Hackish way to make warning appear only if task is not completed
-                // Will show warning if task is not completed and is due
+                /*
+                Hackish way to make warning appear only if task is not completed
+                Will show warning if task is not completed and due date has passed
+                */
                 minDate={props.completed ? undefined : new Date()}
                 minDateMessage={"Your task is due!"}
                 className={classes.dateField}
@@ -27,7 +29,7 @@ const DueDate = props => {
                 inputVariant="outlined"
                 value={props.due_date}
                 format="E, d MMM yyyy HH:mm"
-                // dummy function. onAccept won't work without an onChange
+                // Dummy function. onAccept won't work without an onChange
                 onChange={date => {
                     return;
                 }}
