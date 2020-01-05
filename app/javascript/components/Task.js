@@ -185,7 +185,8 @@ class Task extends React.Component {
                                 : undefined
                         }
                     >
-                        {i}
+                        {/* If i is empty string, render new line instead. */}
+                        {i || <br />}
                     </Typography>
                 ));
 

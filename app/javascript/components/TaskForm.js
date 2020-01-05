@@ -58,9 +58,9 @@ const TaskForm = props => {
             label="Description"
             margin="normal"
             value={props.description}
-            onKeyPress={event => {
-                if (event.key === "Enter") event.preventDefault();
-            }}
+            //onKeyPress={event => {
+            //    if (event.key === "Enter") event.preventDefault();
+            //}}
             onChange={props.handleDescriptionUpdate}
             // Convert string to boolean
             error={!!props.errors.description}
