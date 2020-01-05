@@ -26,6 +26,9 @@ const styles = {
     title: {
         fontWeight: 500
     },
+    description: {
+        whiteSpace: "pre"
+    },
     button: {
         margin: 4
     },
@@ -174,6 +177,7 @@ class Task extends React.Component {
                 .split("\n")
                 .map((i, key) => (
                     <Typography
+                        className={classes.description}
                         key={key}
                         variant="body1"
                         gutterBottom

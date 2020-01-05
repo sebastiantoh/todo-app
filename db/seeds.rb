@@ -15,22 +15,22 @@ Task.create(
 Task.create(
     title: "Grocery Shopping: ingredients for a simple vanilla cake", 
     description: "Unsalted Butter
-    Canola Oil (substitutable with vegetable oil)
-    Sugar
-    Salt
-    Eggs (at least 4 required)
-    Vanilla Extract
-    All-Purpose Flour
-    Baking Powder
-    Buttermilk",
+Canola Oil (substitutable with vegetable oil)
+Sugar
+Salt
+Eggs (at least 4 required)
+Vanilla Extract
+All-Purpose Flour
+Baking Powder
+Buttermilk",
     tag_list: ["Personal", "baking", "shopping"]).toggle!(:completed)
 
 # overdue, but completed
 Task.create(
     title: "Academic Declaration", 
     description: "Declare using EduRec portal. 
-    Must complete at least 24 hours before Module Registration Exercise.
-    Opens from 29 December 2019.",
+Must complete at least 24 hours before Module Registration Exercise.
+Opens from 29 December 2019.",
     tag_list: ["School", "Important"],
     due_date: "2019-12-30T12:00:00+08:00").toggle!(:completed)
 
@@ -43,7 +43,14 @@ Task.create(
 # multiple tags
 Task.create(
     title: "Module Planning", 
-    description: "Research on possible modules to take for the coming semester.",
+    description: "Research on possible modules to take for the coming semester.
+
+Possible Modules:
+  - CS2040S
+  - CS2100
+  - MA1521
+  - IS1103
+  - some random GE",
     tag_list: ["School", "Important"],
     due_date: "2020-01-02T12:00:00+08:00")
 
@@ -77,10 +84,10 @@ Task.create(
 # multi-line description. each line should be rendered on a new line.
 Task.create(
     title: "Lorem ipsum dolor sit amet", 
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet dapibus dolor. 
-    Nulla sit amet nisl ut diam condimentum cursus. Pellentesque id justo eu lorem rhoncus bibendum ut et massa. 
-    Proin dignissim elit et turpis porttitor porttitor. Donec rhoncus ligula et tempor pretium. 
-    Aenean porta ante convallis efficitur ullamcorper.",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet dapibus dolor.
+Nulla sit amet nisl ut diam condimentum cursus. Pellentesque id justo eu lorem rhoncus bibendum ut et massa. 
+Proin dignissim elit et turpis porttitor porttitor. Donec rhoncus ligula et tempor pretium. 
+Aenean porta ante convallis efficitur ullamcorper.",
     tag_list: ["Random", "Recurring"])
 
 Task.create(
