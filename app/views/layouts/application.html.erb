@@ -5,7 +5,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# Below 2 lines are necessary for IE compatibility %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.js?features=fetch"></script>
+    
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
     <%= 
       stylesheet_link_tag :application, 
       'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' 
@@ -17,6 +22,7 @@
     %>
     
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    
   </head>
 
   <body>
